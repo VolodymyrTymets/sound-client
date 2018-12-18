@@ -1,7 +1,7 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
 
-const drawWave =(canvas, stream, styles) => {
+const drawBar =(canvas, stream, styles) => {
 
   const { width, height  } = canvas;
   const canvasCtx = canvas.getContext("2d");
@@ -9,40 +9,33 @@ const drawWave =(canvas, stream, styles) => {
 
   const source = audioCtx.createMediaStreamSource(stream);
   source.connect(analyser);
-  // todo: add it into config
-  analyser.fftSize = 32768;
-  const bufferLength = analyser.fftSize;
+
+  analyser.fftSize = 2048;
+  const bufferLength = analyser.frequencyBinCount;
   let dataArray = new Uint8Array(bufferLength);
   source.connect(analyser);
 
 
   const draw = function() {
     // todo: comment here if stream
-    analyser.getByteTimeDomainData(dataArray);
+    analyser.getByteFrequencyData(dataArray);
     requestAnimationFrame(draw);
     canvasCtx.fillStyle = styles.fillStyle;
     canvasCtx.fillRect(0, 0, width, height);
-    canvasCtx.lineWidth = styles.lineWidth;
-    canvasCtx.strokeStyle = styles.strokeStyle;
     canvasCtx.beginPath();
 
-    const sliceWidth = width * 1.0 / bufferLength;
+    const barWidth = (width / bufferLength) * 2.5;
+    let barHeight;
     let x = 0;
 
     for(let i = 0; i < bufferLength; i++) {
-      const v = dataArray[i] / 128.0; // byte / 2 || 255 / 2
-      const y = v * height / 2;
+      barHeight = dataArray[i];
 
-      if(i === 0) {
-        canvasCtx.moveTo(x, y);
-      } else {
-        canvasCtx.lineTo(x, y);
-      }
-      x += sliceWidth;
+      canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ', 0, 0)';
+      canvasCtx.fillRect(x, height - barHeight / 2, barWidth, barHeight / 2);
+
+      x += barWidth + 1;
     }
-
-    canvasCtx.lineTo(width, height / 2);
-    canvasCtx.stroke();
   };
 
   draw();
@@ -53,4 +46,4 @@ const drawWave =(canvas, stream, styles) => {
 }
 
 
-export { drawWave };
+export { drawBar };

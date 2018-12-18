@@ -1,32 +1,24 @@
-import { withHandlers, compose, lifecycle } from 'recompose';
+import { withHandlers, compose, lifecycle, withProps } from 'recompose';
 import { SinewaveComponent } from './Component';
 import { drawWave } from "./utils";
 
-
-
-const list = {
-  0: [],
-  1: [],
-};
-
 export const Sinewave = compose(
- lifecycle({
-   componentDidMount() {
-     const canvas = document.querySelector('.sinewave');
+  withProps({
+    styles: {
+      fillStyle: 'rgb(255, 255, 255)', // background
+      strokeStyle: 'rgb(0, 0, 0)', // line color
+      lineWidth: 1,
+    },
+  }),
+  lifecycle({
+    componentDidMount() {
+      const canvas = document.querySelector('.sinewave');
+      const { styles } = this.props;
 
-     if (navigator.mediaDevices.getUserMedia) {
-       var constraints = {audio: true}
-       navigator.mediaDevices.getUserMedia (constraints)
-         .then(
-           function(stream) {
-             drawWave(canvas, stream);
-           })
-         .catch( function(err) { console.log('The following gUM error occured: ' + err);})
-     } else {
-       console.log('getUserMedia not supported on your browser!');
-     }
-
-   }
- })
+      navigator.mediaDevices.getUserMedia ({ audio: true })
+        .then(stream => drawWave(canvas, stream, styles))
+        .catch( function(err) { console.log('The following gUM error occured: ' + err);})
+    }
+  })
 )(SinewaveComponent);
 

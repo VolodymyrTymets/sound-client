@@ -31,7 +31,7 @@ const drawBar =(canvas, stream, styles) => {
     for(let i = 0; i < bufferLength; i++) {
       barHeight = dataArray[i];
 
-      canvasCtx.fillStyle = 'rgb(' + (barHeight + 100) + ', 0, 0)';
+      canvasCtx.fillStyle = styles.strokeStyle;
       canvasCtx.fillRect(x, height - barHeight / 2, barWidth, barHeight / 2);
 
       x += barWidth + 1;

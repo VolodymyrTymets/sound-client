@@ -1,3 +1,4 @@
+import { withWaveHeader } from './wave-heared'
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
 
@@ -7,19 +8,20 @@ const drawWave =(canvas, stream, styles) => {
   const canvasCtx = canvas.getContext("2d");
   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-  const source = audioCtx.createMediaStreamSource(stream);
-  source.connect(analyser);
-  // todo: add it into config
-  analyser.fftSize = 32768;
-  const bufferLength = analyser.fftSize;
-  let dataArray = new Uint8Array(bufferLength);
-  source.connect(analyser);
+  // const source = audioCtx.createMediaStreamSource(stream);
+  // source.connect(analyser);
+  // // todo: add it into config
+  // analyser.fftSize = 32768;
+  // const bufferLength = analyser.fftSize;
+  // let dataArray = new Uint8Array(bufferLength);
+  // source.connect(analyser);
 
 
-  const draw = function() {
-    // todo: comment here if stream
+  const draw = function(dataArray, bufferLength) {
+    //console.log(dataArray[1024])
     analyser.getByteTimeDomainData(dataArray);
-    requestAnimationFrame(draw);
+    //console.log(dataArray[1024])
+    // requestAnimationFrame(draw);
     canvasCtx.fillStyle = styles.fillStyle;
     canvasCtx.fillRect(0, 0, width, height);
     canvasCtx.lineWidth = styles.lineWidth;
@@ -44,12 +46,21 @@ const drawWave =(canvas, stream, styles) => {
     canvasCtx.lineTo(width, height / 2);
     canvasCtx.stroke();
   };
+  let letensy = 0
+  analyser.fftSize = 32768;
+  stream.on('data', buffer => {
+    audioCtx.decodeAudioData(
+      withWaveHeader(buffer, 2, 44100), (aydioBuffer) => {
+        const source = audioCtx.createBufferSource();
+        source.buffer = aydioBuffer;
+        source.connect(analyser);
+        const bufferLength = analyser.fftSize;
+        let dataArray = new Uint8Array(bufferLength);
+        draw(dataArray, bufferLength)
 
-  draw();
-  // todo: if stream
-  // setInterval(function () {
-  //   analyser.getByteTimeDomainData(dataArray);
-  // }, 37)
+        source.start();
+      })
+  })
 }
 
 

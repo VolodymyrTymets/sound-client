@@ -1,7 +1,9 @@
-import { barInfo } from "./bar-info";
+import { spectrumInfo } from "./spectrum-info";
+import { windowInfo } from "./window-info";
 
 const store = {
-  barInfo,
+  spectrumInfo,
+  windowInfo,
 };
 
 export { store };

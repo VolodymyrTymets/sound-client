@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import { branch, compose, lifecycle, renderNothing, withProps } from 'recompose';
+import { branch, compose, lifecycle, renderNothing, withProps, mapProps } from 'recompose';
 import { FrequencyBarsComponent } from './Component';
 import { drawBar, getByteFrequencyData } from "./utils";
 import { inject } from 'mobx-react';
@@ -13,7 +13,7 @@ export const FrequencyBars = compose(
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 2048
+    fftSize: 2048,
   }),
   lifecycle({
     componentDidMount() {
@@ -25,8 +25,12 @@ export const FrequencyBars = compose(
       navigatorMicStream.on('data', async buffer => {
         const data = await getByteFrequencyData(buffer, fftSize);
         drawBar(data, canvasCtx, width, height, styles);
-        store.barInfo.setMean(data);
+        store.spectrumInfo.setMean(data);
+        store.spectrumInfo.setMax(data);
       })
     }
-  })
+  }),
+  mapProps(R.applySpec({
+    frequencyHeight: R.path(['store', 'windowInfo', 'frequencyHeight']),
+  }))
 )(FrequencyBarsComponent);

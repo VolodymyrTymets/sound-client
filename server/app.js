@@ -10,7 +10,7 @@ const micConfig = {
   channels: 2,
   debug: false,
   exitOnSilence: 6,
-  device: 'pwd:0',
+  device: 'pwd:1',
 };
 
 

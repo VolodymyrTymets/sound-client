@@ -3,7 +3,7 @@ const mic = require('mic');
 const micConfig = {
   rate: 44100,
   channels: 2,
-  debug: true,
+  debug: false,
   exitOnSilence: 6,
   device: 'hw:0',
 };

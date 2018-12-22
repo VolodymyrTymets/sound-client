@@ -1,8 +1,9 @@
-import { withWaveHeader } from './wave-heared'
+import {withWaveHeader} from "../SinewaveStream/wave-heared";
+
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();
 
-const getByteTimeDomainData = (buffer, fftSize = 32768) => new Promise((resolve, reject) =>{
+const getByteFrequencyData = (buffer, fftSize = 2048) => new Promise((resolve, reject) =>{
   analyser.fftSize = fftSize;
   audioCtx.decodeAudioData(
     // todo: move to settings
@@ -12,39 +13,30 @@ const getByteTimeDomainData = (buffer, fftSize = 32768) => new Promise((resolve,
       source.connect(analyser);
       const bufferLength = analyser.fftSize;
       let dataArray = new Uint8Array(bufferLength);
-      analyser.getByteTimeDomainData(dataArray);
+      analyser.getByteFrequencyData(dataArray);
       source.start();
       resolve(dataArray);
     })
 });
 
 
-const drawWave = function(dataArray, canvasCtx, width, height, styles) {
+const drawBar = function(dataArray, canvasCtx, width, height, styles) {
   canvasCtx.fillStyle = styles.fillStyle;
   canvasCtx.fillRect(0, 0, width, height);
-  canvasCtx.lineWidth = styles.lineWidth;
-  canvasCtx.strokeStyle = styles.strokeStyle;
   canvasCtx.beginPath();
   const bufferLength = dataArray.length;
-
-  const sliceWidth = width * 1.0 / bufferLength;
+  const barWidth = (width / bufferLength) * 2.5;
+  let barHeight;
   let x = 0;
 
   for(let i = 0; i < bufferLength; i++) {
-    const v = dataArray[i] / 128.0; // byte / 2 || 255 / 2
-    const y = v * height / 2;
+    barHeight = dataArray[i];
 
-    if(i === 0) {
-      canvasCtx.moveTo(x, y);
-    } else {
-      canvasCtx.lineTo(x, y);
-    }
-    x += sliceWidth;
+    canvasCtx.fillStyle = styles.strokeStyle;
+    canvasCtx.fillRect(x, height - barHeight / 2, barWidth, barHeight / 2);
+
+    x += barWidth + 1;
   }
-
-  canvasCtx.lineTo(width, height / 2);
-  canvasCtx.stroke();
 };
 
-
-export { getByteTimeDomainData, drawWave };
+export { drawBar, getByteFrequencyData };

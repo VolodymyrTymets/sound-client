@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import { renderNothing, compose, lifecycle, withProps, branch } from 'recompose';
 import { SinewaveComponent } from './Component';
-import { drawWave } from "./utils";
+import { drawWave, getByteTimeDomainData } from "./utils";
 
 export const Sinewave = compose(
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
@@ -11,16 +11,20 @@ export const Sinewave = compose(
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
+    fftSize: 32768,
   }),
   lifecycle({
-    componentDidMount() {
-      const canvas = document.querySelector('.sinewave');
-      const { styles, navigatorMicStream } = this.props;
-      drawWave(canvas, navigatorMicStream, styles)
+    async componentDidMount() {
+      const { styles, navigatorMicStream, fftSize } = this.props;
 
-      // navigator.mediaDevices.getUserMedia ({ audio: true })
-      //   .then(stream => drawWave(canvas, stream, styles))
-      //   .catch( function(err) { console.log('The following gUM error occured: ' + err);})
+      const canvas = document.querySelector('.sinewave');
+      const { width, height  } = canvas;
+      const canvasCtx = canvas.getContext("2d");
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      navigatorMicStream.on('data', async buffer => {
+        const data = await getByteTimeDomainData(buffer, fftSize);
+        drawWave(data, canvasCtx, width, height, styles);
+      })
     }
   })
 )(SinewaveComponent);

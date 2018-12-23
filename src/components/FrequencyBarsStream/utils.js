@@ -1,4 +1,4 @@
-import {withWaveHeader} from "../SinewaveStream/wave-heared";
+import { withWaveHeader } from "../SinewaveStream/wave-heared";
 
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 const analyser = audioCtx.createAnalyser();

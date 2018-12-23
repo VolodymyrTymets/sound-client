@@ -1,13 +1,13 @@
 import React from 'react';
+import { number } from 'prop-types';
 
-// import { string, func } from 'prop-types';
-
-const FrequencyBarsComponent = ({  frequencyHeight }) => (
-  <canvas className="frequency-bars" width="1024" height={frequencyHeight}></canvas>
+const FrequencyBarsComponent = ({  frequencyHeight, frequencyWidth }) => (
+  <canvas className="frequency-bars" width={frequencyWidth} height={frequencyHeight}></canvas>
 );
 
 FrequencyBarsComponent.propTypes = {
-
+  frequencyWidth: number,
+  frequencyHeight: number
 };
 
 export { FrequencyBarsComponent };

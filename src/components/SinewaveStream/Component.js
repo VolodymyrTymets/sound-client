@@ -2,19 +2,15 @@ import * as R from 'ramda';
 import React from 'react';
 import { number } from 'prop-types';
 
-const width = 1024;
-const SinewaveComponent = ({ wavesCount, sineWaveHeight }) => (
+const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth }) => (
   <div className="d-flex flex-row">
-    {
-      R.range(0, wavesCount).map(index =>
-        (<canvas key={index} className={`sinewave-${index}`} width={width / wavesCount} height={sineWaveHeight}></canvas>)
-      )
-    }
+    <canvas className="sinewave" width={sineWaveWidth} height={sineWaveHeight}></canvas>
   </div>
 );
 
 SinewaveComponent.propTypes = {
-  wavesCount: number,
+  sineWaveHeight: number,
+  sineWaveWidth: number,
 };
 
 export { SinewaveComponent };

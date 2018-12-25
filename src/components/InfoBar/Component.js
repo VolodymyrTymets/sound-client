@@ -17,6 +17,7 @@ const InfoBarComponent = ({ spectrumInfo, config, backgroundColor }) => (
       <p>Mic Name: {config.mic.device} </p>
       <p>Time To Listen: {config.timeToListen} </p>
       <p>Min RateDif: {config.minRateDif} </p>
+      <p>Sinewave Scale: {config.sinewaveScale} </p>
     </div>
   </div>
 

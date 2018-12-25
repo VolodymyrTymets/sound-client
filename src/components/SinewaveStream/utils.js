@@ -19,7 +19,7 @@ const getByteTimeDomainData = (buffer, fftSize = 32768, rate, channels) => new P
 });
 
 
-const drawWave = function(dataArray, canvasCtx, width, height, styles) {
+const drawWave = function(dataArray, canvasCtx, width, height, styles, scale = 1) {
   canvasCtx.fillStyle = styles.fillStyle;
   canvasCtx.fillRect(0, 0, width, height);
   canvasCtx.lineWidth = styles.lineWidth;
@@ -29,10 +29,9 @@ const drawWave = function(dataArray, canvasCtx, width, height, styles) {
 
   const sliceWidth = width * 1.0 / bufferLength;
   let x = 0;
-
   for(let i = 0; i < bufferLength; i++) {
-    const v = dataArray[i] / 128.0; // byte / 2 || 255 / 2
-    const y = v * height / 2;
+    const v = (dataArray[i] / 128.0) * scale; // byte / 2 || 255 / 2
+    const y = (v * (height / 2 / scale)) ;
 
     if(i === 0) {
       canvasCtx.moveTo(x, y);

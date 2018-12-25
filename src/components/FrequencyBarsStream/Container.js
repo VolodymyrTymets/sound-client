@@ -14,7 +14,7 @@ export const FrequencyBars = compose(
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 2048,
+    fftSize: 256,
     rate: config.mic.rate,
     channels: config.mic.channels,
   })),

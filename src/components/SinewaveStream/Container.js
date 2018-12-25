@@ -16,16 +16,17 @@ export const Sinewave = observer(compose(
     fftSize: 32768,
     rate: config.mic.rate,
     channels: config.mic.channels,
+    sinewaveScale: config.sinewaveScale,
   })),
   lifecycle({
     async componentDidMount() {
-      const { navigatorMicStream, fftSize, rate, channels } = this.props;
+      const { navigatorMicStream, fftSize, rate, channels, sinewaveScale } = this.props;
       const canvas = document.querySelector('.sinewave');
       const { width, height  } = canvas;
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
       navigatorMicStream.on('data', async buffer => {
-        const wave = await getByteTimeDomainData(buffer, fftSize, rate, channels);
+        const wave = await getByteTimeDomainData(buffer, fftSize, rate, channels, sinewaveScale);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
       })
     },

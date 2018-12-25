@@ -19,7 +19,7 @@ const SpectrumInfo = types
       self.meanOfBreath = meanSpectrumOfBreath.getMean();
 
       if(self.meanOfBreath) {
-        self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10);
+        self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10) || 0;
       }
       self.meanOfBreathR && notify(self.meanOfBreathR, staticConfig);
     },

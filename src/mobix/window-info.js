@@ -10,8 +10,8 @@ const WindowInfo = types
   .actions(self => ({
     init() {
       const windowHeight = window.innerHeight;
-      self.sineWaveHeight = (windowHeight * 0.7) / 2;
-      self.frequencyHeight = (windowHeight * 0.7) / 2;
+      self.sineWaveHeight = (windowHeight * 0.35);
+      self.frequencyHeight = (windowHeight * 0.35);
       self.sineWaveWidth = window.innerWidth;
       self.frequencyWidth = window.innerWidth;
     },

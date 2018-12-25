@@ -3,6 +3,7 @@ import { types } from "mobx-state-tree";
 const staticConfig = {
   timeToListen: 10, // seconds
   minRateDif: 30, // %
+  sinewaveScale: 1.9
 };
 
 const Config = types
@@ -15,6 +16,7 @@ const Config = types
     url: types.string,
     timeToListen: types.number,
     minRateDif: types.number,
+    sinewaveScale: types.number,
   })
   .actions(self => ({
     setMic(rate, channels, device) {

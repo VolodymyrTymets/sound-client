@@ -1,36 +1,27 @@
 import * as R from "ramda";
 import { types } from "mobx-state-tree";
-
-let oscillator = null;
-const getOscillator = () => {
-  // todo: move to some fn
-  var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  var oscillator = audioCtx.createOscillator();
-  oscillator.type = 'square';
-  oscillator.frequency.setValueAtTime(2000, audioCtx.currentTime); // value in hertz
-  oscillator.connect(audioCtx.destination);
-  return oscillator;
-};
-
+import { notify } from "../utils/notify";
+import { MeanSpectrumOfBreath } from "../utils/MeanSpectrumOfBreath";
+import { staticConfig } from './config'
+const meanSpectrumOfBreath = new MeanSpectrumOfBreath(staticConfig);
 
 const SpectrumInfo = types
   .model("SpectrumInfo", {
     mean: types.number,
     max: types.number,
+    meanOfBreath: types.number,
+    meanOfBreathR: types.number,
   })
   .actions(self => ({
     setMean(spectrum) {
       self.mean = parseInt(R.mean(spectrum), 10);
-      // todo: replace to config value
-      if(self.mean > 50) {
-        if(!oscillator) {
-          oscillator = getOscillator();
-          oscillator.start();
-        }
-      } else {
-        oscillator && oscillator.stop();
-        oscillator = null;
+      meanSpectrumOfBreath.listen(self.mean);
+      self.meanOfBreath = meanSpectrumOfBreath.getMean();
+
+      if(self.meanOfBreath) {
+        self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10);
       }
+      self.meanOfBreathR && notify(self.meanOfBreathR, staticConfig);
     },
     setMax(spectrum) {
       self.max = R.reduce(R.max, 0, spectrum)
@@ -39,7 +30,9 @@ const SpectrumInfo = types
 
 const spectrumInfo = SpectrumInfo.create({
   mean: 0,
-  max: 0
+  max: 0,
+  meanOfBreath: 0,
+  meanOfBreathR: 0
 });
 
 export { spectrumInfo };

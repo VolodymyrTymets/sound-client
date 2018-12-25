@@ -1,4 +1,3 @@
-import * as R from "ramda";
 import { types } from "mobx-state-tree";
 
 const WindowInfo = types
@@ -13,8 +12,8 @@ const WindowInfo = types
       const windowHeight = window.innerHeight;
       self.sineWaveHeight = (windowHeight * 0.7) / 2;
       self.frequencyHeight = (windowHeight * 0.7) / 2;
-      self.sineWaveWidth = window.innerWidth - 30;
-      self.frequencyWidth = window.innerWidth - 30;
+      self.sineWaveWidth = window.innerWidth;
+      self.frequencyWidth = window.innerWidth;
     },
   }));
 

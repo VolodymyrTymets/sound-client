@@ -4,37 +4,36 @@ import {renderNothing, compose, lifecycle, withProps, branch, mapProps} from 're
 import { SinewaveComponent } from './Component';
 import { drawWave, getByteTimeDomainData } from "./utils";
 
-export const Sinewave = compose(
+export const Sinewave = observer(compose(
   inject('store'),
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
-  withProps(({ store: { spectrumInfo }}) => ({
+  withProps(({ fillStyle, store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: `rgb(255, ${255 - spectrumInfo.mean}, ${255 - spectrumInfo.mean})`,//'rgb(255, 255, 255)', // background
+      fillStyle: fillStyle, // background
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
     fftSize: 32768,
+    rate: config.mic.rate,
+    channels: config.mic.channels,
   })),
   lifecycle({
     async componentDidMount() {
-      const { navigatorMicStream, fftSize } = this.props;
+      const { navigatorMicStream, fftSize, rate, channels } = this.props;
       const canvas = document.querySelector('.sinewave');
       const { width, height  } = canvas;
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
       navigatorMicStream.on('data', async buffer => {
-        const wave = await getByteTimeDomainData(buffer, fftSize);
+        const wave = await getByteTimeDomainData(buffer, fftSize, rate, channels);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
       })
-
-
-
-    }
+    },
   }),
   mapProps(R.applySpec({
     sineWaveHeight: R.path(['store', 'windowInfo', 'sineWaveHeight']),
     sineWaveWidth: R.path(['store', 'windowInfo', 'sineWaveWidth']),
     wavesCount: R.path(['wavesCount']),
   })),
-)(observer(SinewaveComponent));
+)(SinewaveComponent));
 

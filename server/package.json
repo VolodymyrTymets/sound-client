@@ -6,6 +6,7 @@
   "scripts": {
     "start": "PORT=3001 MIC_NAME=hw:0 MIC_CHANNELS=2 node app.js",
     "start-usb": "PORT=3001 MIC_NAME=hw:2 MIC_CHANNELS=1 node app.js",
+    "start-raspi": "PORT=3001 MIC_NAME=hw:1 MIC_CHANNELS=1 node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

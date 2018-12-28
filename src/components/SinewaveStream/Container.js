@@ -21,12 +21,15 @@ export const Sinewave = observer(compose(
   lifecycle({
     async componentDidMount() {
       const { navigatorMicStream, fftSize, rate, channels, sinewaveScale } = this.props;
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioCtx.createAnalyser();
+
       const canvas = document.querySelector('.sinewave');
       const { width, height  } = canvas;
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
       navigatorMicStream.on('data', async buffer => {
-        const wave = await getByteTimeDomainData(buffer, fftSize, rate, channels, sinewaveScale);
+        const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, fftSize, rate, channels, sinewaveScale);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
       })
     },

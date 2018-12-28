@@ -1,9 +1,6 @@
 import { withWaveHeader } from "../SinewaveStream/wave-heared";
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
-
-const getByteFrequencyData = (buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
+const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
   analyser.fftSize = fftSize;
   audioCtx.decodeAudioData(
     withWaveHeader(buffer, channels, rate), (audioBuffer) => {

@@ -30,6 +30,11 @@ class MeanSpectrumOfBreath {
   getMean() {
     return this._mean;
   }
+  getTimeLeft() {
+    if(!this._isListening) return 0;
+    const diffInSec = (new Date().getTime() - this._statOfListen ) / 1000;
+    return this._time - parseInt(diffInSec, 10);
+  }
 }
 
 export { MeanSpectrumOfBreath };

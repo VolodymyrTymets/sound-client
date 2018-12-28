@@ -1,8 +1,6 @@
 import { withWaveHeader } from './wave-heared'
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
 
-const getByteTimeDomainData = (buffer, fftSize = 32768, rate, channels) => new Promise(resolve =>{
+const getByteTimeDomainData = (audioCtx, analyser, buffer, fftSize = 32768, rate, channels) => new Promise(resolve =>{
   analyser.fftSize = fftSize;
   audioCtx.decodeAudioData(
     // todo: move to settings

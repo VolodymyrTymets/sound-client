@@ -10,7 +10,7 @@ export const FrequencyBars = compose(
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
   withProps(({ store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: getBackgroundColor(spectrumInfo.meanOfBreathR), // background
+      fillStyle: getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft), // background
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
@@ -21,12 +21,15 @@ export const FrequencyBars = compose(
   lifecycle({
     componentDidMount() {
       const { navigatorMicStream, fftSize, channels, rate, store } = this.props;
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const analyser = audioCtx.createAnalyser();
+
       const canvas = document.querySelector('.frequency-bars');
       const { width, height  } = canvas;
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
       navigatorMicStream.on('data', async buffer => {
-        const data = await getByteFrequencyData(buffer, fftSize, rate, channels);
+        const data = await getByteFrequencyData(audioCtx, analyser, buffer, fftSize, rate, channels);
         drawBar(data, canvasCtx, width, height, this.props.styles);
         store.spectrumInfo.setMean(data);
         store.spectrumInfo.setMax(data);

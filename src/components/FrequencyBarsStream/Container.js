@@ -11,9 +11,17 @@ export const FrequencyBars = compose(
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
   withProps(({ store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft), // background
+      fillStyle: getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft, config), // background
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
+      meanLine: {
+        strokeStyle: '#ff0000', // line color
+        lineWidth: 1,
+      },
+      liveLine: {
+        strokeStyle: '#28a745', // line color
+        lineWidth: 1,
+      }
     },
     fftSize: 256,
     rate: config.mic.rate,

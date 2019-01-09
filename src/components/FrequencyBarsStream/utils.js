@@ -1,5 +1,4 @@
 import { withWaveHeader } from "../SinewaveStream/wave-heared";
-import * as R from "ramda";
 
 const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
   analyser.fftSize = fftSize;
@@ -18,16 +17,26 @@ const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, 
 
 const drawLines = (spectrumInfo, minRateDif, canvasCtx, width, height, styles) => {
   canvasCtx.beginPath();
-  const maxOfBreath = spectrumInfo.maxOfBreath / 2;
-  canvasCtx.moveTo(0, maxOfBreath + (maxOfBreath * (minRateDif / 100)));
-  canvasCtx.lineTo(width, maxOfBreath + (maxOfBreath * (minRateDif / 100)));
-  canvasCtx.moveTo(0, height - spectrumInfo.max / 2);
-  canvasCtx.lineTo(width, height - spectrumInfo.max / 2);
+  const moveTo = height - spectrumInfo.meanOfBreath;
+  const withRating = moveTo - (moveTo * ( minRateDif / 100));
+
+  const moveToLive = height - spectrumInfo.mean;
+  const withRatingLive = moveToLive - (moveToLive * ( minRateDif / 100));
+
+  canvasCtx.moveTo(0 , withRating);
+  canvasCtx.lineTo(width, withRating);
+  canvasCtx.strokeStyle = styles.meanLine.strokeStyle;
+  canvasCtx.lineWidth = styles.meanLine.lineWidth;
+  canvasCtx.stroke();
+
+  canvasCtx.moveTo(0, withRatingLive);
+  canvasCtx.lineTo(width, withRatingLive);
+  canvasCtx.strokeStyle = styles.liveLine.strokeStyle;
+  canvasCtx.lineWidth = styles.liveLine.lineWidth;
   canvasCtx.stroke();
 };
 
 const drawBar = function(dataArray, spectrumInfo, minRateDif, canvasCtx, width, height, styles) {
-  canvasCtx.fillStyle = styles.fillStyle;
   canvasCtx.fillRect(0, 0, width, height);
   canvasCtx.beginPath();
   const bufferLength = dataArray.length;
@@ -46,6 +55,8 @@ const drawBar = function(dataArray, spectrumInfo, minRateDif, canvasCtx, width, 
   if (spectrumInfo.meanOfBreath) {
     drawLines(spectrumInfo, minRateDif, canvasCtx, width, height, styles)
   }
+
+  canvasCtx.fillStyle = styles.fillStyle;
 };
 
 export { drawBar, getByteFrequencyData, drawLines };

@@ -10,15 +10,16 @@ const getOscillator = () => {
 
 
 const notify = (meanOfBreathR, config) => {
-   if(meanOfBreathR > config.minRateDif) {
-    if(!oscillator) {
-      oscillator = getOscillator();
-      oscillator.start();
-    }
-  } else {
-    oscillator && oscillator.stop();
-    oscillator = null;
-  }
+  // todo: uncomment after testing
+  // if(meanOfBreathR > config.minRateDif) {
+  //   if(!oscillator) {
+  //     oscillator = getOscillator();
+  //     oscillator.start();
+  //   }
+  // } else {
+  //   oscillator && oscillator.stop();
+  //   oscillator = null;
+  // }
 };
 
 export { notify };

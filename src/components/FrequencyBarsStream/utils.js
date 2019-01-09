@@ -1,4 +1,5 @@
 import { withWaveHeader } from "../SinewaveStream/wave-heared";
+import * as R from "ramda";
 
 const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
   analyser.fftSize = fftSize;
@@ -15,8 +16,17 @@ const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, 
     })
 });
 
+// todo: calculate max
+const drawMeanLine = (spectrumInfo, canvasCtx, width, height, styles) => {
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(0, spectrumInfo.meanOfBreath / 2);
+  canvasCtx.lineTo(width,spectrumInfo.meanOfBreath / 2);
+  canvasCtx.moveTo(0, height - spectrumInfo.max / 2);
+  canvasCtx.lineTo(width, height - spectrumInfo.max / 2);
+  canvasCtx.stroke();
+};
 
-const drawBar = function(dataArray, canvasCtx, width, height, styles) {
+const drawBar = function(dataArray, spectrumInfo, canvasCtx, width, height, styles) {
   canvasCtx.fillStyle = styles.fillStyle;
   canvasCtx.fillRect(0, 0, width, height);
   canvasCtx.beginPath();
@@ -33,6 +43,9 @@ const drawBar = function(dataArray, canvasCtx, width, height, styles) {
 
     x += barWidth + 1;
   }
+  if (spectrumInfo.meanOfBreath) {
+    drawMeanLine(spectrumInfo, canvasCtx, width, height, styles)
+  }
 };
 
-export { drawBar, getByteFrequencyData };
+export { drawBar, getByteFrequencyData, drawMeanLine };

@@ -16,17 +16,17 @@ const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, 
     })
 });
 
-// todo: calculate max
-const drawMeanLine = (spectrumInfo, canvasCtx, width, height, styles) => {
+const drawLines = (spectrumInfo, minRateDif, canvasCtx, width, height, styles) => {
   canvasCtx.beginPath();
-  canvasCtx.moveTo(0, spectrumInfo.meanOfBreath / 2);
-  canvasCtx.lineTo(width,spectrumInfo.meanOfBreath / 2);
+  const maxOfBreath = spectrumInfo.maxOfBreath / 2;
+  canvasCtx.moveTo(0, maxOfBreath + (maxOfBreath * (minRateDif / 100)));
+  canvasCtx.lineTo(width, maxOfBreath + (maxOfBreath * (minRateDif / 100)));
   canvasCtx.moveTo(0, height - spectrumInfo.max / 2);
   canvasCtx.lineTo(width, height - spectrumInfo.max / 2);
   canvasCtx.stroke();
 };
 
-const drawBar = function(dataArray, spectrumInfo, canvasCtx, width, height, styles) {
+const drawBar = function(dataArray, spectrumInfo, minRateDif, canvasCtx, width, height, styles) {
   canvasCtx.fillStyle = styles.fillStyle;
   canvasCtx.fillRect(0, 0, width, height);
   canvasCtx.beginPath();
@@ -44,8 +44,8 @@ const drawBar = function(dataArray, spectrumInfo, canvasCtx, width, height, styl
     x += barWidth + 1;
   }
   if (spectrumInfo.meanOfBreath) {
-    drawMeanLine(spectrumInfo, canvasCtx, width, height, styles)
+    drawLines(spectrumInfo, minRateDif, canvasCtx, width, height, styles)
   }
 };
 
-export { drawBar, getByteFrequencyData, drawMeanLine };
+export { drawBar, getByteFrequencyData, drawLines };

@@ -18,7 +18,6 @@ const WindowInfo = types
     },
     interactWithWindow () {
       self.isInteracted = true;
-      console.log(  self.isInteracted)
     }
   }));
 

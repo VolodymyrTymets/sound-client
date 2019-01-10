@@ -30,7 +30,7 @@ const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
 
 const AppBranch =  compose(
   branch(({ windowInfo }) => !windowInfo.isInteracted, renderComponent(InteractWindow)),
-)(AppComponent);
+)(observer(AppComponent));
 
 export const App = compose(
   observer,

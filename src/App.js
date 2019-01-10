@@ -18,7 +18,7 @@ const url = process.env.NODE_ENV === 'production' ?
 const socket = socketClient(url);
 
 const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
- const fillStyle = getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft);
+ const fillStyle = getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft, config);
  return  <div className="container-fluid" style={{padding: 0}}>
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}

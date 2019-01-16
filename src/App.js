@@ -1,6 +1,6 @@
 import * as R from "ramda";
 import React from 'react';
-import { compose, lifecycle, mapProps, withState } from "recompose";
+import { compose, lifecycle, mapProps, withState, branch, renderComponent } from "recompose";
 import { inject, observer } from "mobx-react";
 import ss from 'socket.io-stream';
 import socketClient from 'socket.io-client';
@@ -8,6 +8,7 @@ import socketClient from 'socket.io-client';
 import { Sinewave } from './components/SinewaveStream';
 import { FrequencyBars } from './components/FrequencyBarsStream';
 import { InfoBar } from './components/InfoBar';
+import { InteractWindow } from './components/InteractWindow';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getBackgroundColor } from '../src/utils/getBackgroundColor';
@@ -17,7 +18,7 @@ const url = process.env.NODE_ENV === 'production' ?
 const socket = socketClient(url);
 
 const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
- const  fillStyle = getBackgroundColor(spectrumInfo.meanOfBreathR);
+ const fillStyle = getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft, config);
  return  <div className="container-fluid" style={{padding: 0}}>
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}
@@ -25,9 +26,14 @@ const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
       <FrequencyBars navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}
     <InfoBar backgroundColor={fillStyle}/>
   </div>;
-}
+};
+
+const AppBranch =  compose(
+  branch(({ windowInfo }) => !windowInfo.isInteracted, renderComponent(InteractWindow)),
+)(observer(AppComponent));
 
 export const App = compose(
+  observer,
   inject('store'),
   mapProps(R.applySpec({
     spectrumInfo: R.path(['store','spectrumInfo']),
@@ -44,7 +50,7 @@ export const App = compose(
         this.props.config.setMic(mic.rate, mic.channels, mic.device);
       });
     }
-  })
-)(observer(AppComponent));
+  }),
+)(observer(AppBranch));
 
 export default App;

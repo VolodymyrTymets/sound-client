@@ -6,6 +6,7 @@ const WindowInfo = types
     frequencyHeight: types.number,
     sineWaveWidth: types.number,
     frequencyWidth: types.number,
+    isInteracted: types.boolean,
   })
   .actions(self => ({
     init() {
@@ -15,6 +16,9 @@ const WindowInfo = types
       self.sineWaveWidth = window.innerWidth;
       self.frequencyWidth = window.innerWidth;
     },
+    interactWithWindow () {
+      self.isInteracted = true;
+    }
   }));
 
 const windowInfo = WindowInfo.create({
@@ -22,6 +26,7 @@ const windowInfo = WindowInfo.create({
   frequencyHeight: 0,
   sineWaveWidth: 0,
   frequencyWidth: 0,
+  isInteracted: false,
 });
 
 export { windowInfo };

@@ -1,9 +1,6 @@
 import { withWaveHeader } from "../SinewaveStream/wave-heared";
 
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
-
-const getByteFrequencyData = (buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
+const getByteFrequencyData = (audioCtx, analyser, buffer, fftSize = 2048, rate, channels) => new Promise(resolve =>{
   analyser.fftSize = fftSize;
   audioCtx.decodeAudioData(
     withWaveHeader(buffer, channels, rate), (audioBuffer) => {
@@ -18,9 +15,28 @@ const getByteFrequencyData = (buffer, fftSize = 2048, rate, channels) => new Pro
     })
 });
 
+const drawLines = (spectrumInfo, minRateDif, canvasCtx, width, height, styles) => {
+  canvasCtx.beginPath();
+  const moveTo = height - spectrumInfo.meanOfBreath;
+  const withRating = moveTo - (moveTo * ( minRateDif / 100));
 
-const drawBar = function(dataArray, canvasCtx, width, height, styles) {
-  canvasCtx.fillStyle = styles.fillStyle;
+  const moveToLive = height - spectrumInfo.mean;
+  const withRatingLive = moveToLive - (moveToLive * ( minRateDif / 100));
+
+  canvasCtx.moveTo(0 , withRating);
+  canvasCtx.lineTo(width, withRating);
+  canvasCtx.strokeStyle = styles.meanLine.strokeStyle;
+  canvasCtx.lineWidth = styles.meanLine.lineWidth;
+  canvasCtx.stroke();
+
+  canvasCtx.moveTo(0, withRatingLive);
+  canvasCtx.lineTo(width, withRatingLive);
+  canvasCtx.strokeStyle = styles.liveLine.strokeStyle;
+  canvasCtx.lineWidth = styles.liveLine.lineWidth;
+  canvasCtx.stroke();
+};
+
+const drawBar = function(dataArray, spectrumInfo, minRateDif, canvasCtx, width, height, styles) {
   canvasCtx.fillRect(0, 0, width, height);
   canvasCtx.beginPath();
   const bufferLength = dataArray.length;
@@ -36,6 +52,11 @@ const drawBar = function(dataArray, canvasCtx, width, height, styles) {
 
     x += barWidth + 1;
   }
+  if (spectrumInfo.meanOfBreath) {
+    drawLines(spectrumInfo, minRateDif, canvasCtx, width, height, styles)
+  }
+
+  canvasCtx.fillStyle = styles.fillStyle;
 };
 
-export { drawBar, getByteFrequencyData };
+export { drawBar, getByteFrequencyData, drawLines };

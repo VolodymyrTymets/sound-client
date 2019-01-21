@@ -16,6 +16,15 @@ const getByteTimeDomainData = (audioCtx, analyser, buffer, fftSize = 32768, rate
     })
 });
 
+const getV = (v, scale = 0.5) => {
+  const newV = v == 1
+    ? v
+    : v > 1
+      ? v + scale
+      : v - scale
+
+  return newV
+};
 
 const drawWave = function(dataArray, canvasCtx, width, height, styles, scale = 2.5) {
 
@@ -29,9 +38,11 @@ const drawWave = function(dataArray, canvasCtx, width, height, styles, scale = 2
   const sliceWidth = width * 1.0 / bufferLength;
   let x = 0;
 
+  const newV = getV(dataArray[0] / 128.0);
+  console.log({ v: dataArray[0] / 128.0, newV });
   for(let i = 0; i < bufferLength; i++) {
-    const v = (dataArray[i] / 128.0) * scale; // byte / 2 || 255 / 2
-    const y = (v * (height /  (1 + scale)));
+    const v = getV(dataArray[i] / 128.0); // byte / 2 || 255 / 2
+    const y = v * height / 2;
 
     if(i === 0) {
       canvasCtx.moveTo(x, y);

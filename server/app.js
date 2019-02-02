@@ -1,11 +1,11 @@
 const http = require('http');
-const ss = require('socket.io-stream');
 const express = require('express');
 const path = require('path');
 const app = express();
 
-const { micInputStream } = require('./src/mic');
+//const { micInputStream } = require('./src/mic');
 const { config } = require('./src/config');
+const { onStart } = require('./src/onStart');
 
 app.use(express.static(path.resolve(__dirname, './public/build/')));
 app.use(express.static(path.resolve(__dirname, './public/assets/')));
@@ -21,17 +21,8 @@ const io = require('socket.io').listen(server, {
   transports: ['websocket', 'htmlfile', 'xhr-polling', 'jsonp-polling', 'polling']
 });
 
-io.on('connection', client => {
-  console.log('----> connect')
-  const stream = ss.createStream();
-  micInputStream.pipe(stream);
-  ss(client).emit('mic-stream', stream, { mic: {
-    rate: config.mic.rate,
-    channels: config.mic.channels,
-    device: config.mic.device,
-  } });
-  client.on('disconnect', () => {});
-});
+// tun nerve recognize alg
+onStart(config, io);
 
 server.listen(config.port, function () {
   console.log('Example app listening on port 3001!');

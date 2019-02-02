@@ -10,7 +10,6 @@ const SpectrumInfo = types
     mean: types.number,
     max: types.number,
     meanOfBreath: types.number,
-    maxOfBreath: types.number,
     meanOfBreathR: types.number,
     timeLeft: types.number,
   })
@@ -20,11 +19,11 @@ const SpectrumInfo = types
       self.max = R.reduce(R.max, 0, spectrum)
       meanSpectrumOfBreath.listen(self.mean, self.max);
       self.meanOfBreath = meanSpectrumOfBreath.getMean();
-      self.maxOfBreath = meanSpectrumOfBreath.getMax();
       self.timeLeft = meanSpectrumOfBreath.getTimeLeft();
 
       if(self.meanOfBreath) {
         self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10) || 0;
+        self.meanOfBreathR = self.meanOfBreathR > 0 ? self.meanOfBreathR : 0;
       }
       self.meanOfBreathR && notify(self.meanOfBreathR, staticConfig);
     },
@@ -35,7 +34,6 @@ const spectrumInfo = SpectrumInfo.create({
   max: 0,
   meanOfBreath: 0,
   meanOfBreathR: 0,
-  maxOfBreath: 0,
   timeLeft: -1,
 });
 

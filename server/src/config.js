@@ -6,6 +6,17 @@ const config = {
     exitOnSilence: 6,
     device: process.env.MIC_NAME || 'hw:1'
   },
+  gpio: {
+    mic: 13,
+    nerve: 26,
+    muscle: 19,
+    switcher: 6,
+  },
+  spectrumWorker: {
+    minRateDiff: 10, // %
+    timeToLearn: 10, // seconds
+  },
+  DEBUG_MODE: process.env.DEBUG || true,
   port: process.env.PORT || 3001
 };
 

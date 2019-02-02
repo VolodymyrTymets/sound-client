@@ -3,7 +3,6 @@ import { branch, compose, lifecycle, renderNothing, withProps, mapProps } from '
 import { FrequencyBarsComponent } from './Component';
 import { drawBar, getByteFrequencyData, drawMeanLine } from "./utils";
 import { inject, observer } from 'mobx-react';
-import { getBackgroundColor } from '../../utils/getBackgroundColor';
 
 export const FrequencyBars = compose(
   observer,
@@ -11,7 +10,7 @@ export const FrequencyBars = compose(
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
   withProps(({ store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft, config), // background
+      fillStyle: 'white',
       strokeStyle: 'rgb(0, 0, 0)', // line color
       lineWidth: 1,
       meanLine: {

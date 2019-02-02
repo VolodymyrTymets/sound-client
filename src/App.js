@@ -23,8 +23,8 @@ const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}
     {config.mic.rate &&
-      <FrequencyBars navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}
-    <InfoBar backgroundColor={fillStyle}/>
+      <FrequencyBars navigatorMicStream={navigatorMicStream} />}
+    <InfoBar />
   </div>;
 };
 

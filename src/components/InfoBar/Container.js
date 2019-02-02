@@ -8,8 +8,7 @@ const InfoBarContainer = compose(
   mapProps(R.applySpec({
     spectrumInfo: R.path(['store','spectrumInfo']),
     config: R.path(['store','config']),
-    backgroundColor: R.path(['backgroundColor']),
-  })),
+    })),
 )(observer(InfoBarComponent));
 
 export const InfoBar = inject('store')(InfoBarContainer);

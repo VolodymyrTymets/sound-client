@@ -1,5 +1,5 @@
 const path = require('path');
-const config = require('../../config');
+const { config } = require('../../config');
 const { exec } = require('child_process');
 const { NERVE, MIC, MUSCLE } = require('../../constants');
 
@@ -48,14 +48,10 @@ class Notifier {
 	nerveNotify() {
 		this._gpioNotify(NERVE, 1);
     this._gpioNotify(MUSCLE, 0);
-		// setTimeout(() => this._gpioNotify(NERVE, 0), 500);
-		// this.soundNotify('nerve');
 	}
   muscleNotify() {
     this._gpioNotify(MUSCLE, 1);
     this._gpioNotify(NERVE, 0);
-    // setTimeout(() => this._gpioNotify(MUSCLE, 0), 500);
-    // this.soundNotify(MUSCLE);
   }
   gpioOff() {
     this._gpioNotify(MUSCLE, 0);

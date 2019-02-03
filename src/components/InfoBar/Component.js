@@ -20,7 +20,7 @@ const InfoBarComponent = ({ spectrumInfo, config }) =>
     <div >
       <div className="d-flex flex-column justify-content-center" >
         <h1 className="text-center">
-           {spectrumInfo.meanOfBreathR} %
+           {spectrumInfo.meanOfBreathR} % / {config.minRateDif} %
         </h1>
         <h1 className="text-center">
           {spectrumInfo.mean} / {spectrumInfo.meanOfBreath}

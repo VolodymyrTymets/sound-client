@@ -13,7 +13,7 @@ const config = {
     switcher: 6,
   },
   spectrumWorker: {
-    minRateDiff: 10, // %
+    minRateDif: parseInt(process.env.RATE || 10), // %
     timeToLearn: 10, // seconds
   },
   DEBUG_MODE: process.env.DEBUG || true,

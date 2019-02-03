@@ -25,6 +25,9 @@ const Config = types
     setUrl(url) {
       self.url = url;
     },
+    setMinRateDif(minRateDif = staticConfig.minRateDif) {
+      self.minRateDif = minRateDif;
+    }
    }));
 
 const config = Config.create({

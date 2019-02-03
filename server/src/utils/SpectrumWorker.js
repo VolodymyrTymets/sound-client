@@ -22,7 +22,7 @@ class SpectrumWorker extends EventEmitter {
 		console.log(color || colors.FgWhite, `[SpectrumWorker] --> ${msg}`);
 	}
 	start(wave) {
-    const { minRateDiff, minTimeToNotify, timeToLearn } = this._config;
+    const { minRateDif, minTimeToNotify, timeToLearn } = this._config;
     this._statOfListen = this._statOfListen || new Date().getTime();
     const { spectrum } = fft(wave);
 
@@ -32,7 +32,7 @@ class SpectrumWorker extends EventEmitter {
     if(diffInSec > timeToLearn) {
       const ratingS = this.tI(100 - (this.MEAN_SPECTRUM * 100) / maxSpectrum) || 0;
 
-      if(ratingS > minRateDiff) {
+      if(ratingS > minRateDif) {
         this.log(`S:[${ratingS} %] ${maxSpectrum}/${this.MEAN_SPECTRUM}`, colors.FgRed);
         this.emit(NERVE, { ratingS, maxSpectrum });
 			} else {

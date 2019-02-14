@@ -1,6 +1,6 @@
 const { config } = require('../../config');
 const { NERVE, MIC, MUSCLE } = require('../../constants');
-const { soundNotify } = require('./sound-notify');
+const { wavFileNotifier } = require('./file-notify');
 
 let micOut = null;
 let nerveOut = null;
@@ -32,12 +32,11 @@ class Notifier {
 	nerveNotify() {
 		this._gpioNotify(NERVE, 1);
     this._gpioNotify(MUSCLE, 0);
-    soundNotify.play();
+    wavFileNotifier.notify();
 	}
   muscleNotify() {
     this._gpioNotify(MUSCLE, 1);
     this._gpioNotify(NERVE, 0);
-    soundNotify.stop();
   }
   gpioOff() {
     this._gpioNotify(MUSCLE, 0);

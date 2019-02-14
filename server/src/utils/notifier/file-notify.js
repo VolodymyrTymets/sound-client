@@ -33,9 +33,9 @@ class WavFileNotifier {
     // for mac
     // exec(`afplay  ${filePath}`);
     // for ubuntu
-    exec(`afplay -D plughw:1 ${filePath}`);
-    exec(`afplay -D plughw:0 ${filePath}`);
-    exec(`afplay -D hw:0 ${filePath}`);
+    exec(`aplay -D plughw:1 ${filePath}`);
+    exec(`aplay -D plughw:0 ${filePath}`);
+    exec(`aplay -D hw:0 ${filePath}`);
   }
   notify(type = 'def') {
     if(!this._duration[type]) {

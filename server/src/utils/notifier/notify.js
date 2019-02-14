@@ -1,7 +1,6 @@
-const path = require('path');
 const { config } = require('../../config');
-const { exec } = require('child_process');
 const { NERVE, MIC, MUSCLE } = require('../../constants');
+const { wavFileNotifier } = require('./file-notify');
 
 let micOut = null;
 let nerveOut = null;
@@ -18,40 +17,32 @@ try {
 
 class Notifier {
 	constructor() {
-    this._filePath = {
-    	def: path.resolve(__dirname ,'../../assets', './notification.wav'),
-      nerve: path.resolve(__dirname ,'../../assets', './nerve.wav'),
-      muscle: path.resolve(__dirname ,'../../assets', './muscle.wav'),
-    };
-
 		this._gpio = {
 			mic: micOut,
 			nerve: nerveOut,
 			muscle: muscleOut,
 		};
+		this._lastNotificationDate = null;
 		this._gpioNotify = this._gpioNotify.bind(this);
-    this.soundNotify = this.soundNotify.bind(this);
 	}
 
 	_gpioNotify(name, value){
-      this._gpio[name] && this._gpio[name].writeSync(value);
-	}
-
-	soundNotify(type = 'def') {
-		const filePath = this._filePath[type];
-		exec(`aplay -D plughw:2 ${filePath}`);
-    exec(`aplay -D plughw:1 ${filePath}`);
-    exec(`aplay -D plughw:0 ${filePath}`);
-    exec(`aplay -D hw:0 ${filePath}`);
+    this._gpio[name] && this._gpio[name].writeSync(value);
 	}
 
 	nerveNotify() {
-		this._gpioNotify(NERVE, 1);
-    this._gpioNotify(MUSCLE, 0);
+    this._lastNotificationDate = this._lastNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastNotificationDate);
+    if(diff >= (config.notifier.minBreathTime)) {
+      this._gpioNotify(NERVE, 1);
+      this._gpioNotify(MUSCLE, 0);
+      wavFileNotifier.notify();
+    }
 	}
   muscleNotify() {
     this._gpioNotify(MUSCLE, 1);
     this._gpioNotify(NERVE, 0);
+    this._lastNotificationDate = null;
   }
   gpioOff() {
     this._gpioNotify(MUSCLE, 0);

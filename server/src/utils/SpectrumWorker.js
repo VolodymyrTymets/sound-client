@@ -19,7 +19,7 @@ class SpectrumWorker extends EventEmitter {
 
 	log(msg, color) {
     this._DEBUG_MODE &&
-		console.log(color || colors.FgWhite, `[SpectrumWorker] --> ${msg}`);
+		  console.log(color || colors.FgWhite, `[SpectrumWorker] --> ${msg}`);
 	}
 	start(wave) {
     const { minRateDif, minTimeToNotify, timeToLearn } = this._config;

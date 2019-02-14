@@ -22,21 +22,27 @@ class Notifier {
 			nerve: nerveOut,
 			muscle: muscleOut,
 		};
+		this._lastNotificationDate = null;
 		this._gpioNotify = this._gpioNotify.bind(this);
 	}
 
 	_gpioNotify(name, value){
-      this._gpio[name] && this._gpio[name].writeSync(value);
+    this._gpio[name] && this._gpio[name].writeSync(value);
 	}
 
 	nerveNotify() {
-		this._gpioNotify(NERVE, 1);
-    this._gpioNotify(MUSCLE, 0);
-    wavFileNotifier.notify();
+    this._lastNotificationDate = this._lastNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastNotificationDate);
+    if(diff >= (config.notifier.minBreathTime)) {
+      this._gpioNotify(NERVE, 1);
+      this._gpioNotify(MUSCLE, 0);
+      wavFileNotifier.notify();
+    }
 	}
   muscleNotify() {
     this._gpioNotify(MUSCLE, 1);
     this._gpioNotify(NERVE, 0);
+    this._lastNotificationDate = null;
   }
   gpioOff() {
     this._gpioNotify(MUSCLE, 0);

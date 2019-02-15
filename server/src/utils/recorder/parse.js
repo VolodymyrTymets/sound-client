@@ -1,6 +1,6 @@
-const { mean, max, values } = require('lodash');
+const { mean, max, values, range } = require('lodash');
 const WavDecoder = require('wav-decoder');
-const { fft } = require('../fft/fft');
+const { fft, spliceSpectrum } = require('../fft/fft');
 const path = require('path');
 const fs = require('fs');
 
@@ -24,8 +24,9 @@ const decode = filePath => {
 };
 
 
-const filePath1 =  path.resolve('./private/parse/m', `${process.argv[2]}.wav`);
-const filePath2 =  path.resolve('./private/parse/n', `${process.argv[3]}.wav`);
+const folderPathM =  path.resolve('./private/parse/m');
+const folderPathN =  path.resolve('./private/parse/n');
+
 const tI = (n) => parseInt(n, 10);
 
 const findSpectrum = async (filePath) => {
@@ -38,10 +39,13 @@ const findSpectrum = async (filePath) => {
       const chank = wave.slice(i, i + CHANK_LENGTH);
       if (chank.length < CHANK_LENGTH) continue;
       const { spectrum } = fft(chank);
-      spectrums.push(spectrum);
+      spectrums.push(spliceSpectrum(spectrum, 40));
     }
-    const maxes = spectrums.map(s => max(s));
-    return mean(maxes);
+
+    const meanSpectrum = spectrums[0].map(
+      (v,i) => mean(spectrums.map(s => s[i])));
+    const meanMaxValue = mean(spectrums.map(max));
+    return { spectrum: meanSpectrum, meanMaxValue };
   } catch (e) {
     console.log(e)
   }
@@ -49,10 +53,38 @@ const findSpectrum = async (filePath) => {
 
 const run = async () => {
   try {
-    const meanM = await findSpectrum(filePath1);
-    const meanN = await findSpectrum(filePath2);
-    const ratingS = tI(100 - (meanM * 100) / meanN) || 0;
-    console.log(`---> M:${meanM} N:${meanN} [${ratingS}]`)
+    let meansM = [];
+    let meanM = 0;
+    const breathToreports = [];
+    const nerveToreports = [];
+
+    // read all from m folder
+    const filesM = fs.readdirSync(folderPathM);
+    for(let i=0; i < filesM.length; i++) {
+      const filePath = path.resolve(folderPathM, filesM[i]);
+      if(filePath.split('.')[1] !== 'wav') continue;
+      console.log('M --->', filePath);
+      const { spectrum, meanMaxValue } = await findSpectrum(filePath);
+      breathToreports.push([meanMaxValue, ...spectrum]);
+      meansM.push(meanMaxValue);
+    }
+    meanM = mean(meansM);
+
+    // read all from n folder
+    const filesN = fs.readdirSync(folderPathN);
+    for(let i=0; i < filesN.length; i++) {
+      const filePath = path.resolve(folderPathN, filesN[i]);
+      if(filePath.split('.')[1] !== 'wav') continue;
+      const { spectrum, meanMaxValue } = await findSpectrum(filePath);
+      const ratingS = tI(100 - (meanM * 100) / meanMaxValue) || 0;
+      nerveToreports.push([meanMaxValue, ...spectrum]);
+
+      console.log(`--> N ${filesN[i]} -> M:${meanM} N:${meanMaxValue} [${ratingS}]`)
+    }
+
+    const toReportStr = report => report.map(s => s.join(',')).join('\n');
+    fs.writeFileSync(path.resolve(folderPathM, 'report.csv'), toReportStr(breathToreports), 'utf8');
+    fs.writeFileSync(path.resolve(folderPathN, 'report.csv'), toReportStr(nerveToreports), 'utf8');
   } catch (e) {
     console.log(e)
   }

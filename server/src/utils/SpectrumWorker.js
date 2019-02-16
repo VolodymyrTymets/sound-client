@@ -22,6 +22,7 @@ class SpectrumWorker extends EventEmitter {
 		  console.log(color || colors.FgWhite, `[SpectrumWorker] --> ${msg}`);
 	}
 	start(wave) {
+	  console.log('--->', wave.length)
     const { minRateDif, minTimeToNotify, timeToLearn } = this._config;
     this._statOfListen = this._statOfListen || new Date().getTime();
     const { spectrum } = fft(wave);

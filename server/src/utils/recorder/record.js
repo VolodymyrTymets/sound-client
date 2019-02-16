@@ -32,6 +32,6 @@ micInputStream.on('error', (err) => {
 process.on('exit', () => {
   micInstance.stop();
 });
-process.on('SIGINT', async () => process.exit());
+process.on('SIGINT', () => process.exit());
 
 micInstance.start();

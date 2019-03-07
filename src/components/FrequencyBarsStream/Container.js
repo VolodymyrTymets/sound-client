@@ -1,26 +1,26 @@
 import * as R from "ramda";
 import { branch, compose, lifecycle, renderNothing, withProps, mapProps } from 'recompose';
 import { FrequencyBarsComponent } from './Component';
-import { drawBar, getByteFrequencyData, drawMeanLine } from "./utils";
+import { drawBar, getByteFrequencyData } from "./utils";
 import { inject, observer } from 'mobx-react';
 
 export const FrequencyBars = compose(
   observer,
   inject('store'),
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
-  withProps(({ store: { spectrumInfo, config }}) => ({
+  withProps(({ color, store: { spectrumInfo, config }}) => ({
     styles: {
       fillStyle: 'white',
-      strokeStyle: 'rgb(0, 0, 0)', // line color
+      strokeStyle: color, // line color
       lineWidth: 1,
-      meanLine: {
-        strokeStyle: '#ff0000', // line color
-        lineWidth: 1,
-      },
-      liveLine: {
-        strokeStyle: '#28a745', // line color
-        lineWidth: 1,
-      }
+      // meanLine: {
+      //   strokeStyle: '#ff0000', // line color
+      //   lineWidth: 1,
+      // },
+      // liveLine: {
+      //   strokeStyle: '#28a745', // line color
+      //   lineWidth: 1,
+      // }
     },
     fftSize: 256,
     rate: config.mic.rate,

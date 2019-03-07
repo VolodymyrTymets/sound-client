@@ -9,7 +9,10 @@ const onMicStream = (config, io) => (micInputStream) => {
         rate: config.mic.rate,
         channels: config.mic.channels,
         device: config.mic.device,
-      }, minRateDif: config.spectrumWorker.minRateDif });
+      },
+      minRateDif: config.spectrumWorker.minRateDif,
+      minBreathTime: config.notifier.minBreathTime
+    });
     client.on('disconnect', () => {});
   });
 };

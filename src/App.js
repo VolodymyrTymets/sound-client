@@ -17,16 +17,15 @@ const url = process.env.NODE_ENV === 'production' ?
   `${window.location.hostname}:${window.location.port}` : `${window.location.hostname}:3001`;
 const socket = socketClient(url);
 
-const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) => {
- const fillStyle = getBackgroundColor(spectrumInfo.meanOfBreathR, spectrumInfo.timeLeft, config);
- return  <div className="container-fluid" style={{padding: 0}}>
+const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) =>
+  <div className="container-fluid" style={{padding: 0}}>
     {config.mic.rate &&
-      <Sinewave navigatorMicStream={navigatorMicStream} fillStyle={fillStyle} />}
+      <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
     {config.mic.rate &&
-      <FrequencyBars navigatorMicStream={navigatorMicStream} />}
+      <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
     <InfoBar />
   </div>;
-};
+
 
 const AppBranch =  compose(
   branch(({ windowInfo }) => !windowInfo.isInteracted, renderComponent(InteractWindow)),
@@ -45,10 +44,13 @@ export const App = compose(
     componentDidMount() {
       this.props.windowInfo.init();
       this.props.config.setUrl(url);
-      ss(socket).on('mic-stream', (stream, { mic, minRateDif }) => {
+      ss(socket).on('mic-stream', (stream, { mic, minRateDif, minBreathTime }) => {
         this.props.setStream(stream);
+
         this.props.config.setMinRateDif(minRateDif);
+        this.props.config.setMinBreathTime(minBreathTime);
         this.props.config.setMic(mic.rate, mic.channels, mic.device);
+        this.props.spectrumInfo.changeConfig({ minRateDif, minBreathTime })
       });
     }
   }),

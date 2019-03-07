@@ -9,8 +9,6 @@ class MeanSpectrumOfBreath {
     this._minRateDif = config.minRateDif;
     this._lastNotificationDate = null;
 
-    console.log('c ->', config)
-
     this._means = [];
     this._mean = 0;
     this._maxes = [];
@@ -62,7 +60,7 @@ class MeanSpectrumOfBreath {
         return `rgb(255, ${155 - (meanRating + 15) || 0},  ${155 - (meanRating + 15) || 0})`; // red
       }
     }
-    return 'blue';//`rgb(${155}, 255, ${155})`; // green
+    return 'blue'; //`rgb(${155}, 255, ${155})`; // green
   }
 }
 

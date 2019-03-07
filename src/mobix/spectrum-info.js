@@ -12,11 +12,12 @@ const SpectrumInfo = types
     meanOfBreath: types.number,
     meanOfBreathR: types.number,
     timeLeft: types.number,
+    color: types.string,
   })
   .actions(self => ({
     setMean(spectrum) {
       self.mean = parseInt(R.mean(spectrum), 10);
-      self.max = R.reduce(R.max, 0, spectrum)
+      self.max = R.reduce(R.max, 0, spectrum);
       meanSpectrumOfBreath.listen(self.mean, self.max);
       self.meanOfBreath = meanSpectrumOfBreath.getMean();
       self.timeLeft = meanSpectrumOfBreath.getTimeLeft();
@@ -25,8 +26,12 @@ const SpectrumInfo = types
         self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10) || 0;
         self.meanOfBreathR = self.meanOfBreathR > 0 ? self.meanOfBreathR : 0;
       }
+      self.color = meanSpectrumOfBreath.getColor(self.meanOfBreathR);
       self.meanOfBreathR && notify(self.meanOfBreathR, staticConfig);
     },
+    changeConfig(config) {
+      meanSpectrumOfBreath.changeConfig(config)
+    }
   }));
 
 const spectrumInfo = SpectrumInfo.create({
@@ -35,6 +40,7 @@ const spectrumInfo = SpectrumInfo.create({
   meanOfBreath: 0,
   meanOfBreathR: 0,
   timeLeft: -1,
+  color: 'black',
 });
 
 export { spectrumInfo };

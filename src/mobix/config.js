@@ -3,7 +3,8 @@ import { types } from "mobx-state-tree";
 const staticConfig = {
   timeToListen: 10, // seconds
   minRateDif: 10, // %
-  sinewaveScale: 1.9
+  sinewaveScale: 1.9,
+  minBreathTime: 100 // miliseconds
 };
 
 const Config = types
@@ -17,6 +18,7 @@ const Config = types
     timeToListen: types.number,
     minRateDif: types.number,
     sinewaveScale: types.number,
+    minBreathTime: types.number,
   })
   .actions(self => ({
     setMic(rate, channels, device) {
@@ -27,7 +29,10 @@ const Config = types
     },
     setMinRateDif(minRateDif = staticConfig.minRateDif) {
       self.minRateDif = minRateDif;
-    }
+    },
+    setMinBreathTime(minBreathTime = staticConfig.minBreathTime) {
+      self.minBreathTime = minBreathTime;
+    },
    }));
 
 const config = Config.create({

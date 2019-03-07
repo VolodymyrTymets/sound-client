@@ -15,6 +15,10 @@ const config = {
   spectrumWorker: {
     minRateDif: parseInt(process.env.RATE || 10), // %
     timeToLearn: 10, // seconds
+
+  },
+  notifier: {
+    minBreathTime: parseInt(process.env.BT || 100), // milliseconds
   },
   DEBUG_MODE: process.env.DEBUG || true,
   port: process.env.PORT || 3001

@@ -5,6 +5,9 @@ class MeanSpectrumOfBreath {
     this._statOfListen = null;
     this._isListening = true;
     this._time = config.timeToListen; // s
+    this._minBreathTime = config.minBreathTime;
+    this._minRateDif = config.minRateDif;
+    this._lastNotificationDate = null;
 
     this._means = [];
     this._mean = 0;
@@ -12,7 +15,11 @@ class MeanSpectrumOfBreath {
     this._max = 0;
     this.listen = this.listen.bind(this);
   }
-
+  changeConfig(config) {
+    this._time = config.timeToListen || this._time; // s
+    this._minBreathTime = config.minBreathTime || this._minBreathTime;
+    this._minRateDif = config.minRateDif || this._minRateDif;
+  }
   listen(meanSpectrum, maxSpectrum) {
     if(!this._isListening) return;
 
@@ -42,6 +49,18 @@ class MeanSpectrumOfBreath {
     if(!this._isListening) return 0;
     const diffInSec = (new Date().getTime() - this._statOfListen ) / 1000;
     return this._time - parseInt(diffInSec, 10);
+  }
+  /** Change color only after little latency breath of people**/
+  getColor(meanRating) {
+    if(this._isListening) return 'black';
+    this._lastNotificationDate = this._lastNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastNotificationDate);
+    if(meanRating > this._minRateDif) {
+      if(diff >= this._minBreathTime) {
+        return `rgb(255, ${155 - (meanRating + 15) || 0},  ${155 - (meanRating + 15) || 0})`; // red
+      }
+    }
+    return 'blue'; //`rgb(${155}, 255, ${155})`; // green
   }
 }
 

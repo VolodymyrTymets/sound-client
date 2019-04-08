@@ -35,6 +35,7 @@ class WavFileNotifier {
     // for ubuntu
     exec(`aplay -D plughw:1 ${filePath}`);
     exec(`aplay -D plughw:0 ${filePath}`);
+    exec(`aplay -D plughw:2 ${filePath}`);
     exec(`aplay -D hw:0 ${filePath}`);
   }
   notify(type = 'def') {

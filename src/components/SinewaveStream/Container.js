@@ -7,10 +7,10 @@ import { drawWave, getByteTimeDomainData } from "./utils";
 export const Sinewave = observer(compose(
   inject('store'),
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
-  withProps(({ fillStyle, store: { spectrumInfo, config }}) => ({
+  withProps(({ color, store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: fillStyle, // background
-      strokeStyle: 'rgb(0, 0, 0)', // line color
+      fillStyle: 'white', //fillStyle, // background
+      strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
     fftSize: 32768,

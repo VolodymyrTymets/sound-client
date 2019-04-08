@@ -8,6 +8,7 @@
     "start-usb": "PORT=3001 RATE=50 BT=500 MIC_NAME=hw:2 MIC_CHANNELS=1 node app.js",
     "start-raspi": "PORT=3001 MIC_NAME=hw:1 MIC_CHANNELS=1 node app.js",
     "record": "MIC_NAME=hw:1 MIC_CHANNELS=1 node ./src/utils/recorder/record.js",
+    "pm2-raspi": "export PORT=3001 MIC_NAME=hw:1 MIC_CHANNELS=1 RATE=30 BT=300 && pm2 start app.js --name 'sound-client'",
     "convert": "node ./src/utils/recorder/convert.js",
     "parse": "node ./src/utils/recorder/parse.js",
     "test": "echo \"Error: no test specified\" && exit 1"

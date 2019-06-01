@@ -8,18 +8,16 @@ const getOscillator = () => {
   return oscillator;
 };
 
-
-const notify = (meanOfBreathR, config) => {
-  // todo: uncomment after testing
-  // if(meanOfBreathR > config.minRateDif) {
-  //   if(!oscillator) {
-  //     oscillator = getOscillator();
-  //     oscillator.start();
-  //   }
-  // } else {
-  //   oscillator && oscillator.stop();
-  //   oscillator = null;
-  // }
+const soundStart = () => {
+  if(!oscillator) {
+    oscillator = getOscillator();
+    oscillator.start();
+  }
 };
 
-export { notify };
+const soundStop = () => {
+  oscillator && oscillator.stop();
+  oscillator = null;
+};
+
+export { soundStart, soundStop };

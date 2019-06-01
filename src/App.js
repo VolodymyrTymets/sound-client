@@ -44,11 +44,16 @@ export const App = compose(
     componentDidMount() {
       this.props.windowInfo.init();
       this.props.config.setUrl(url);
-      ss(socket).on('mic-stream', (stream, { mic, minRateDif, minBreathTime }) => {
+      ss(socket).on('mic-stream', (stream, {
+        mic,
+        minRateDif,
+        minBreathTime,
+        maxRateDif
+      }) => {
         this.props.setStream(stream);
 
-        this.props.config.setMinRateDif(minRateDif);
-        this.props.config.setMinBreathTime(minBreathTime);
+        this.props.config.setRate(minRateDif, maxRateDif);
+          this.props.config.setMinBreathTime(minBreathTime);
         this.props.config.setMic(mic.rate, mic.channels, mic.device);
         this.props.spectrumInfo.changeConfig({ minRateDif, minBreathTime })
       });

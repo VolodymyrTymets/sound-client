@@ -11,6 +11,7 @@ const onMicStream = (config, io) => (micInputStream) => {
         device: config.mic.device,
       },
       minRateDif: config.spectrumWorker.minRateDif,
+      maxRateDif: config.spectrumWorker.maxRateDif,
       minBreathTime: config.notifier.minBreathTime
     });
     client.on('disconnect', () => {});

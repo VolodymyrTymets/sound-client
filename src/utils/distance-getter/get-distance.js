@@ -9,7 +9,6 @@
  * @param {Number} - distance range from RLN where reaction are possible
 **/
 const getDistance = (min, max, rating, range = 6) => {
-    console.log('--->', { min, max, rating,  })
     if(rating < min ) return null;
     if(rating > max ) return 0;
     // step of value that is changing with distance

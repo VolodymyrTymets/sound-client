@@ -15,16 +15,20 @@ const ConfigBar = ({ config }) => (
   </div>
 );
 
-const InfoBarComponent = ({ spectrumInfo, config }) =>
+const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
   spectrumInfo.timeLeft <= 0 ? (
     <div >
+      <h1 className="text-center" style={{color: spectrumInfo.color}}>
+        {distance !== null ? `${distance} mm`: '-'  }
+      </h1>
       <div className="d-flex flex-column justify-content-center" >
-        <h1 className="text-center">
-           {spectrumInfo.meanOfBreathR} % / {config.minRateDif} %
-        </h1>
-        <h1 className="text-center">
-          {spectrumInfo.mean} / {spectrumInfo.meanOfBreath}
-        </h1>
+        <h3 className="text-center">
+          <small className="text-muted">Spectrum: </small>
+          {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
+        </h3>
+        <h5 className="text-center">
+          <small className="text-muted">Range: </small>{config.minRateDif}  / {config.maxRateDif}
+        </h5>
       </div>
       {/*{<ConfigBar config={config}>}*/}
     </div>

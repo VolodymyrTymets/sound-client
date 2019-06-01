@@ -13,9 +13,9 @@ const config = {
     switcher: 6,
   },
   spectrumWorker: {
-    minRateDif: parseInt(process.env.RATE || 10), // %
+    minRateDif: parseInt(process.env.MIN_RATE || 50), // %
+    maxRateDif: parseInt(process.env.MAx_RATE || 90), // %
     timeToLearn: 10, // seconds
-
   },
   notifier: {
     minBreathTime: parseInt(process.env.BT || 100), // milliseconds

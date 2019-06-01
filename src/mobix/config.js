@@ -2,7 +2,8 @@ import { types } from "mobx-state-tree";
 
 const staticConfig = {
   timeToListen: 10, // seconds
-  minRateDif: 10, // %
+  minRateDif: 50, // %
+  maxRateDif: 90, // %
   sinewaveScale: 1.9,
   minBreathTime: 100 // miliseconds
 };
@@ -17,6 +18,7 @@ const Config = types
     url: types.string,
     timeToListen: types.number,
     minRateDif: types.number,
+    maxRateDif: types.number,
     sinewaveScale: types.number,
     minBreathTime: types.number,
   })
@@ -27,8 +29,12 @@ const Config = types
     setUrl(url) {
       self.url = url;
     },
-    setMinRateDif(minRateDif = staticConfig.minRateDif) {
-      self.minRateDif = minRateDif;
+    setRate(min = staticConfig.minRateDif, max = staticConfig.maxRateDif) {
+      self.minRateDif = min;
+      self.maxRateDif = max;
+    },
+    setMaxRateDif(maxRateDif = staticConfig.maxRateDif) {
+      self.maxRateDif = maxRateDif;
     },
     setMinBreathTime(minBreathTime = staticConfig.minBreathTime) {
       self.minBreathTime = minBreathTime;

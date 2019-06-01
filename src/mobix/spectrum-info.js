@@ -1,6 +1,5 @@
 import * as R from "ramda";
 import { types } from "mobx-state-tree";
-import { notify } from "../utils/notify";
 import { MeanSpectrumOfBreath } from "../utils/MeanSpectrumOfBreath";
 import { staticConfig } from './config'
 const meanSpectrumOfBreath = new MeanSpectrumOfBreath(staticConfig);
@@ -27,7 +26,9 @@ const SpectrumInfo = types
         self.meanOfBreathR = self.meanOfBreathR > 0 ? self.meanOfBreathR : 0;
       }
       self.color = meanSpectrumOfBreath.getColor(self.meanOfBreathR);
-      self.meanOfBreathR && notify(self.meanOfBreathR, staticConfig);
+      if(self.meanOfBreathR) {
+        meanSpectrumOfBreath.soundNotify(self.meanOfBreathR);
+      }
     },
     changeConfig(config) {
       meanSpectrumOfBreath.changeConfig(config)

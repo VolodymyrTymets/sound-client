@@ -1,4 +1,5 @@
 import * as R from "ramda";
+import {  soundStart, soundStop } from './soud-notify';
 
 class MeanSpectrumOfBreath {
   constructor(config) {
@@ -7,7 +8,8 @@ class MeanSpectrumOfBreath {
     this._time = config.timeToListen; // s
     this._minBreathTime = config.minBreathTime;
     this._minRateDif = config.minRateDif;
-    this._lastNotificationDate = null;
+    this._lastColorNotificationDate = null;
+    this._lastSoundNotificationDate = null;
 
     this._means = [];
     this._mean = 0;
@@ -53,14 +55,26 @@ class MeanSpectrumOfBreath {
   /** Change color only after little latency breath of people**/
   getColor(meanRating) {
     if(this._isListening) return 'black';
-    this._lastNotificationDate = this._lastNotificationDate || new Date().getTime();
-    const diff = (new Date().getTime() - this._lastNotificationDate);
+    this._lastColorNotificationDate = this._lastColorNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastColorNotificationDate);
     if(meanRating > this._minRateDif) {
       if(diff >= this._minBreathTime) {
         return `rgb(255, ${155 - (meanRating + 15) || 0},  ${155 - (meanRating + 15) || 0})`; // red
       }
     }
     return 'blue'; //`rgb(${155}, 255, ${155})`; // green
+  }
+  soundNotify(meanRating) {
+    this._lastSoundNotificationDate = this._lastSoundNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastSoundNotificationDate);
+    if(meanRating > this._minRateDif) {
+      if(diff >= this._minBreathTime) {
+        console.log('----> soundStart ', )
+        return soundStart();
+      }
+    }
+    console.log('----> soundStop')
+    return soundStop();
   }
 }
 

@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { inject, observer } from "mobx-react";
-import {renderNothing, compose, lifecycle, withProps, branch, mapProps} from 'recompose';
+import {renderNothing, compose, lifecycle, withProps, branch, mapProps, withState, withHandlers } from 'recompose';
 import { SinewaveComponent } from './Component';
 import { drawWave, getByteTimeDomainData } from "./utils";
 
@@ -13,14 +13,26 @@ export const Sinewave = observer(compose(
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 32768,
+    fftSize: 32768 / 8,
     rate: config.mic.rate,
     channels: config.mic.channels,
     sinewaveScale: config.sinewaveScale,
+    chunkCount: 80,
   })),
+  withState('imgUrl', 'setImgUrl'),
+  withState('imgUrls', 'setImgUrls', []),
+  withHandlers({
+    changeUrls: ({ setImgUrls, imgUrls, chunkCount}) => (url) => {
+      if(chunkCount === imgUrls.length) {
+        imgUrls.pop();
+      }
+      const urls = [url, ...imgUrls];
+      setImgUrls(urls)
+    }
+  }),
   lifecycle({
     async componentDidMount() {
-      const { navigatorMicStream, fftSize, rate, channels, sinewaveScale } = this.props;
+      const { navigatorMicStream, fftSize, rate, channels, sinewaveScale, setImgUrl, changeUrls } = this.props;
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const analyser = audioCtx.createAnalyser();
 
@@ -28,6 +40,12 @@ export const Sinewave = observer(compose(
       const { width, height  } = canvas;
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      setInterval(() => {
+        const url = canvas.toDataURL();
+        changeUrls(url);
+      },
+        (fftSize / rate)  * 1000)
       navigatorMicStream.on('data', async buffer => {
         const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, fftSize, rate, channels, sinewaveScale);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
@@ -38,6 +56,9 @@ export const Sinewave = observer(compose(
     sineWaveHeight: R.path(['store', 'windowInfo', 'sineWaveHeight']),
     sineWaveWidth: R.path(['store', 'windowInfo', 'sineWaveWidth']),
     wavesCount: R.path(['wavesCount']),
+    imgUrl: R.path(['imgUrl']),
+    imgUrls: R.path(['imgUrls']),
+    chunkCount: R.path(['chunkCount']),
   })),
 )(SinewaveComponent));
 

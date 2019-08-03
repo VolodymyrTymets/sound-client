@@ -21,9 +21,11 @@ const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) =>
   <div className="container-fluid" style={{padding: 0}}>
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
-    {config.mic.rate &&
-      <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
-    <InfoBar />
+    <div className="d-flex flex-row">
+      <InfoBar />
+      {config.mic.rate &&
+        <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
+    </div>
   </div>;
 
 

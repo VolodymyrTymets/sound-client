@@ -3,7 +3,8 @@ import React from 'react';
 
 // use it on dev
 const ConfigBar = ({ config }) => (
-  <div className="d-flex flex-column justify-content-between">
+  <div className="d-flex flex-column justify-content-center align-items-center">
+
     <p>Config:  </p>
     <p>Url: {config.url} </p>
     <p>Mic Rate: {config.mic.rate} </p>
@@ -17,7 +18,7 @@ const ConfigBar = ({ config }) => (
 
 const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
   spectrumInfo.timeLeft <= 0 ? (
-    <div >
+    <div className="d-flex flex-column justify-content-center align-items-center flex-fill">
       <h1 className="text-center" style={{color: spectrumInfo.color}}>
         {distance !== null ? `${distance} mm`: '-'  }
       </h1>
@@ -32,7 +33,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
       </div>
       {/*{<ConfigBar config={config}>}*/}
     </div>
-    ) : (<h1 className="text-center">{spectrumInfo.timeLeft }</h1>);
+    ) : (<div className="flex-fill d-flex flex-column justify-content-center "><h1 className="text-center">{spectrumInfo.timeLeft }</h1></div>);
 
 InfoBarComponent.propTypes = {
 

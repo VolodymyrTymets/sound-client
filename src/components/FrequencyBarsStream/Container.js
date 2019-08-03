@@ -13,14 +13,6 @@ export const FrequencyBars = compose(
       fillStyle: 'white',
       strokeStyle: color, // line color
       lineWidth: 1,
-      // meanLine: {
-      //   strokeStyle: '#ff0000', // line color
-      //   lineWidth: 1,
-      // },
-      // liveLine: {
-      //   strokeStyle: '#28a745', // line color
-      //   lineWidth: 1,
-      // }
     },
     fftSize: 256,
     rate: config.mic.rate,

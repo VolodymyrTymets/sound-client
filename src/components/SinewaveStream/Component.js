@@ -2,9 +2,21 @@ import * as R from 'ramda';
 import React from 'react';
 import { number } from 'prop-types';
 
-const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth }) => (
+const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls }) => (
   <div className="d-flex flex-row">
-    <canvas className="sinewave" width={sineWaveWidth} height={sineWaveHeight}></canvas>
+    {R.range(1, chunkCount + 1).map((index) =>
+      imgUrls[chunkCount - index] && <img
+        src={imgUrls[chunkCount - index]}
+        key={`image-${index}`}
+        width={sineWaveWidth / chunkCount}
+        height={sineWaveHeight}
+      />)
+    }
+    <canvas
+      className="sinewave"
+      width={sineWaveWidth / chunkCount}
+      height={sineWaveHeight}
+    />
   </div>
 );
 

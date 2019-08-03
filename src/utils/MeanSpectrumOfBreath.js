@@ -54,7 +54,7 @@ class MeanSpectrumOfBreath {
   }
   /** Change color only after little latency breath of people**/
   getColor(meanRating) {
-    if(this._isListening) return 'black';
+    if(this._isListening) return '#c6c8ca'; //grey
     this._lastColorNotificationDate = this._lastColorNotificationDate || new Date().getTime();
     const diff = (new Date().getTime() - this._lastColorNotificationDate);
     if(meanRating > this._minRateDif) {
@@ -62,7 +62,7 @@ class MeanSpectrumOfBreath {
         return `rgb(255, ${155 - (meanRating + 15) || 0},  ${155 - (meanRating + 15) || 0})`; // red
       }
     }
-    return 'blue'; //`rgb(${155}, 255, ${155})`; // green
+    return 'black'; //`rgb(${155}, 255, ${155})`; // green
   }
   soundNotify(meanRating) {
     this._lastSoundNotificationDate = this._lastSoundNotificationDate || new Date().getTime();

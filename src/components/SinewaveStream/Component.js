@@ -8,7 +8,7 @@ const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls 
       imgUrls[chunkCount - index] && <img
         src={imgUrls[chunkCount - index]}
         key={`image-${index}`}
-        width={sineWaveWidth / chunkCount}
+        width={(sineWaveWidth - (sineWaveWidth / chunkCount)) / chunkCount}
         height={sineWaveHeight}
       />)
     }
@@ -19,6 +19,7 @@ const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls 
     />
   </div>
 );
+
 
 SinewaveComponent.propTypes = {
   sineWaveHeight: number,

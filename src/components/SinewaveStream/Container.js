@@ -4,6 +4,8 @@ import {renderNothing, compose, lifecycle, withProps, branch, mapProps, withStat
 import { SinewaveComponent } from './Component';
 import { drawWave, getByteTimeDomainData } from "./utils";
 
+const n = 2;
+const time = 15; //seconds
 export const Sinewave = observer(compose(
   inject('store'),
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
@@ -13,11 +15,11 @@ export const Sinewave = observer(compose(
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 32768 / 8,
+    fftSize: 32768 / n,
     rate: config.mic.rate,
     channels: config.mic.channels,
     sinewaveScale: config.sinewaveScale,
-    chunkCount: 80,
+    chunkCount: time * n,
   })),
   withState('imgUrl', 'setImgUrl'),
   withState('imgUrls', 'setImgUrls', []),
@@ -41,14 +43,16 @@ export const Sinewave = observer(compose(
       const canvasCtx = canvas.getContext("2d");
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-      setInterval(() => {
-        const url = canvas.toDataURL();
-        changeUrls(url);
-      },
-        (fftSize / rate)  * 1000)
+      let interval = null;
       navigatorMicStream.on('data', async buffer => {
+
         const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, fftSize, rate, channels, sinewaveScale);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
+        interval = interval || setInterval(() => {
+            const url = canvas.toDataURL();
+            changeUrls(url);
+          },
+          (fftSize / rate)  * 1000)
       })
     },
   }),

@@ -8,13 +8,13 @@ const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls 
       imgUrls[chunkCount - index] && <img
         src={imgUrls[chunkCount - index]}
         key={`image-${index}`}
-        width={(sineWaveWidth - (sineWaveWidth / chunkCount)) / chunkCount}
+        width={(sineWaveWidth ) / (chunkCount + 1)}
         height={sineWaveHeight}
       />)
     }
     <canvas
       className="sinewave"
-      width={sineWaveWidth / chunkCount}
+      width={sineWaveWidth / (chunkCount + 1)}
       height={sineWaveHeight}
     />
   </div>

@@ -18,11 +18,11 @@ const ConfigBar = ({ config }) => (
 
 const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
   spectrumInfo.timeLeft <= 0 ? (
-    <div className="d-flex flex-column justify-content-center align-items-center flex-fill">
+    <div className="d-flex flex-column align-items-t flex-fill">
       <h1 className="text-center" style={{color: spectrumInfo.color}}>
         {distance !== null ? `${distance} mm`: '-'  }
       </h1>
-      <div className="d-flex flex-column justify-content-center" >
+      <div className="d-flex flex-column " >
         <h3 className="text-center">
           <small className="text-muted">Spectrum: </small>
           {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
@@ -33,7 +33,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
       </div>
       {/*{<ConfigBar config={config}>}*/}
     </div>
-    ) : (<div className="flex-fill d-flex flex-column justify-content-center "><h1 className="text-center">{spectrumInfo.timeLeft }</h1></div>);
+    ) : (<div className="flex-fill d-flex flex-column"><h1 className="text-center">{spectrumInfo.timeLeft }</h1></div>);
 
 InfoBarComponent.propTypes = {
 

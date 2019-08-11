@@ -4,6 +4,7 @@ import { MeanSpectrumOfBreath } from "../utils/MeanSpectrumOfBreath";
 import { staticConfig } from './config'
 const meanSpectrumOfBreath = new MeanSpectrumOfBreath(staticConfig);
 
+const MAX_SPECTRUM_OF_MIC = 100;
 const SpectrumInfo = types
   .model("SpectrumInfo", {
     mean: types.number,
@@ -22,8 +23,16 @@ const SpectrumInfo = types
       self.timeLeft = meanSpectrumOfBreath.getTimeLeft();
 
       if(self.meanOfBreath) {
-        self.meanOfBreathR = parseInt(100 - (self.meanOfBreath * 100) / self.mean, 10) || 0;
-        self.meanOfBreathR = self.meanOfBreathR > 0 ? self.meanOfBreathR : 0;
+        /** taking into account that max spectrum of mic can't be > 100, need to calculate how much spectrum of breath
+         *  of stimulation bigger than spectrum of normal breath, from range that left.*/
+        const left = MAX_SPECTRUM_OF_MIC - self.mean;
+        const leftMean = MAX_SPECTRUM_OF_MIC - self.meanOfBreath;
+        const newRating = parseInt(100 - (left * 100) / leftMean, 10) || 0;
+        if(leftMean > left) {
+          self.meanOfBreathR = newRating;
+          self.meanOfBreathR = self.meanOfBreathR > 0 ? self.meanOfBreathR : 0;
+        }
+
       }
       self.color = meanSpectrumOfBreath.getColor(self.meanOfBreathR);
       if(self.meanOfBreathR) {

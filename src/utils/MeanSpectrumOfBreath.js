@@ -69,11 +69,9 @@ class MeanSpectrumOfBreath {
     const diff = (new Date().getTime() - this._lastSoundNotificationDate);
     if(meanRating > this._minRateDif) {
       if(diff >= this._minBreathTime) {
-        console.log('----> soundStart ', )
         return soundStart();
       }
     }
-    console.log('----> soundStop')
     return soundStop();
   }
 }

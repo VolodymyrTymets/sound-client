@@ -18,10 +18,10 @@ const url = process.env.NODE_ENV === 'production' ?
 const socket = socketClient(url);
 
 const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) =>
-  <div className="container-fluid" style={{padding: 0}}>
+  <div className="container-fluid" style={{padding: 10}}>
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
-    <div className="d-flex flex-row">
+    <div className="d-flex flex-row pt-1">
       <InfoBar />
       {config.mic.rate &&
         <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}

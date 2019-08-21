@@ -18,7 +18,7 @@ class SpectrumWorker extends EventEmitter {
 	tI(n) { return parseInt(n, 10) }
 
 	log(msg, color) {
-        this._DEBUG_MODE &&
+        !this._DEBUG_MODE &&
 		  console.log(color || colors.FgWhite, `[SpectrumWorker] --> ${msg}`);
 	}
 	start(wave) {

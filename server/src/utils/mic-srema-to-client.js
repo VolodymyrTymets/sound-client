@@ -1,3 +1,4 @@
+const { spawn } = require('child_process');
 const ss = require('socket.io-stream');
 
 const onMicStream = (config, io) => (micInputStream) => {
@@ -15,6 +16,14 @@ const onMicStream = (config, io) => (micInputStream) => {
       minBreathTime: config.notifier.minBreathTime
     });
     client.on('disconnect', () => {});
+
+    // todo mic refactor
+    client.on('micRate', ({ micRate }) => {
+      console.log('---->',micRate)
+      spawn('amixer', ['-c', 2, 'set', 'Mic', `${micRate}%`]).stdout.on('data', (data) => {
+        console.log('----->', data.toString())
+      });
+    })
   });
 };
 

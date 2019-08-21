@@ -22,7 +22,7 @@ const AppComponent = ({ navigatorMicStream, spectrumInfo, config }) =>
     {config.mic.rate &&
       <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
     <div className="d-flex flex-row pt-1">
-      <InfoBar />
+      <InfoBar socket={socket} />
       {config.mic.rate &&
         <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} />}
     </div>

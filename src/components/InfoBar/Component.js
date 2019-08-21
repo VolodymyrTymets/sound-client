@@ -1,4 +1,6 @@
 import React from 'react';
+import { Range } from 'react-range';
+
 // import { string, func } from 'prop-types';
 
 // use it on dev
@@ -16,7 +18,9 @@ const ConfigBar = ({ config }) => (
   </div>
 );
 
-const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
+// todo mic refactor
+
+const InfoBarComponent = ({ spectrumInfo, config, distance, micRate, setMicRate }) =>
   spectrumInfo.timeLeft <= 0 ? (
     <div className="d-flex flex-column align-items-t flex-fill">
       <h1 className="text-center" style={{color: spectrumInfo.color}}>
@@ -32,6 +36,37 @@ const InfoBarComponent = ({ spectrumInfo, config, distance }) =>
         </h5>
       </div>
       {/*{<ConfigBar config={config}>}*/}
+      <Range
+        step={0.1}
+        min={0}
+        max={100}
+        values={[micRate]}
+        onChange={rate => setMicRate(rate[0])}
+        renderTrack={({ props, children }) => (
+          <div
+            {...props}
+            style={{
+              ...props.style,
+              height: '6px',
+              width: '100%',
+              backgroundColor: '#ccc'
+            }}
+          >
+            {children}
+          </div>
+        )}
+        renderThumb={({ props }) => (
+          <div
+            {...props}
+            style={{
+              ...props.style,
+              height: '42px',
+              width: '42px',
+              backgroundColor: '#999'
+            }}
+          />
+        )}
+      />
     </div>
     ) : (<div className="flex-fill d-flex flex-column"><h1 className="text-center">{spectrumInfo.timeLeft }</h1></div>);
 

@@ -12,6 +12,8 @@ const ls = spawn('amixer', ['scontrols']);
    amixer -c 2 set Mic 2db // from 0 to 24
  * */
 
+// todo mic refactor
+
 ls.stdout.on('data', (data) => {
   const paramsStrings = data.toString()
     .replace(/Simple mixer control/g, '')

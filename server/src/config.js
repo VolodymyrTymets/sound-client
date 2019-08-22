@@ -4,7 +4,9 @@ const config = {
     channels: parseInt(process.env.MIC_CHANNELS || 2, 10),
     debug: false,
     exitOnSilence: 6,
-    device: process.env.MIC_NAME || 'hw:1'
+    device: `${process.env.MIC_NAME || 'hw'}:${process.env.CARD  || 1}`,
+    card: process.env.CARD || 1,
+    micDeviceName: process.env.MID_DEVICE || 'Mic'
   },
   gpio: {
     mic: 13,

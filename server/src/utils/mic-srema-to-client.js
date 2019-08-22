@@ -1,5 +1,6 @@
 const { spawn } = require('child_process');
 const ss = require('socket.io-stream');
+const { micLevelListen } = require('./mic-level');
 
 const onMicStream = (config, io) => (micInputStream) => {
   io.on('connection', client => {
@@ -17,13 +18,7 @@ const onMicStream = (config, io) => (micInputStream) => {
     });
     client.on('disconnect', () => {});
 
-    // todo mic refactor
-    client.on('micRate', ({ micRate }) => {
-      console.log('---->',micRate)
-      spawn('amixer', ['-c', 2, 'set', 'Mic', `${micRate}%`]).stdout.on('data', (data) => {
-        console.log('----->', data.toString())
-      });
-    })
+    micLevelListen(client, config);
   });
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Range } from 'react-range';
+import {  MicLevelControl } from './components/MicLevelControl'
 
 // import { string, func } from 'prop-types';
 
@@ -20,55 +21,29 @@ const ConfigBar = ({ config }) => (
 
 // todo mic refactor
 
-const InfoBarComponent = ({ spectrumInfo, config, distance, micRate, setMicRate }) =>
-  spectrumInfo.timeLeft <= 0 ? (
-    <div className="d-flex flex-column align-items-t flex-fill">
-      <h1 className="text-center" style={{color: spectrumInfo.color}}>
-        {distance !== null ? `${distance} mm`: '-'  }
-      </h1>
-      <div className="d-flex flex-column " >
-        <h3 className="text-center">
-          <small className="text-muted">Spectrum: </small>
-          {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
-        </h3>
-        <h5 className="text-center">
-          <small className="text-muted">Range: </small>{config.minRateDif}  / {config.maxRateDif}
-        </h5>
+const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) =>
+  <div className="d-flex flex-column align-items-t flex-fill">
+    <MicLevelControl socket={socket} />
+    { spectrumInfo.timeLeft <= 0 ?
+      <div>
+        <h1 className="text-center" style={{color: spectrumInfo.color}}>
+          {distance !== null ? `${distance} mm`: '-'  }
+        </h1>
+        <div className="d-flex flex-column " >
+          <h3 className="text-center">
+            <small className="text-muted">Spectrum: </small>
+            {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
+          </h3>
+          <h5 className="text-center">
+            <small className="text-muted">Range: </small>{config.minRateDif}  / {config.maxRateDif}
+          </h5>
+        </div>
+      </div>:
+      <div className="flex-fill d-flex flex-column">
+        <h1 className="text-center">{spectrumInfo.timeLeft }</h1>
       </div>
-      {/*{<ConfigBar config={config}>}*/}
-      <Range
-        step={0.1}
-        min={0}
-        max={100}
-        values={[micRate]}
-        onChange={rate => setMicRate(rate[0])}
-        renderTrack={({ props, children }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '6px',
-              width: '100%',
-              backgroundColor: '#ccc'
-            }}
-          >
-            {children}
-          </div>
-        )}
-        renderThumb={({ props }) => (
-          <div
-            {...props}
-            style={{
-              ...props.style,
-              height: '42px',
-              width: '42px',
-              backgroundColor: '#999'
-            }}
-          />
-        )}
-      />
-    </div>
-    ) : (<div className="flex-fill d-flex flex-column"><h1 className="text-center">{spectrumInfo.timeLeft }</h1></div>);
+    }
+  </div>;
 
 InfoBarComponent.propTypes = {
 

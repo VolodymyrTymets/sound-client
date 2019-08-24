@@ -1,10 +1,12 @@
 import React from 'react';
 import { Range } from 'react-range';
-import './style.css'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMicrophoneAlt } from '@fortawesome/free-solid-svg-icons';
+import './style.css';
 
 const MicLevelControlComponent = ({ micRate, setMicRate }) =>
   <div className="d-flex flex-row">
-    <p className="">Mic:</p>
+    <p className="icon-container"><FontAwesomeIcon icon={faMicrophoneAlt} className="icon" /></p>
     <p className="indicator">-</p>
     <div className="range-container">
      <Range
@@ -32,7 +34,13 @@ const MicLevelControlComponent = ({ micRate, setMicRate }) =>
               ...props.style,
 
             }}
-          />
+          >
+              <div className="circle-container">
+              <div className="circle"> </div>
+              <div className="circle"> </div>
+              <div className="circle"> </div>
+              </div>
+          </div>
         )}
       />
     </div>

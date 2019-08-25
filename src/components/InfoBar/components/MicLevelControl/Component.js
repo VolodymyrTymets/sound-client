@@ -1,5 +1,5 @@
 import React from 'react';
-import { Range } from 'react-range';
+import { getTrackBackground, Range} from 'react-range';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophoneAlt } from '@fortawesome/free-solid-svg-icons';
 import './style.css';
@@ -10,7 +10,7 @@ const MicLevelControlComponent = ({ micRate, setMicRate }) =>
     <p className="indicator">-</p>
     <div className="range-container">
      <Range
-        step={0.1}
+        step={1}
         min={0}
         max={100}
         values={[micRate]}
@@ -20,13 +20,19 @@ const MicLevelControlComponent = ({ micRate, setMicRate }) =>
             {...props}
             style={{
               ...props.style,
+                background: getTrackBackground({
+                    values: [micRate],
+                    colors: ['#000000', '#aaa',],
+                    min: 0,
+                    max: 100,
+                }),
             }}
             className='line'
           >
             {children}
           </div>
         )}
-        renderThumb={({ props }) => (
+        renderThumb={({ props, isDragged}) => (
           <div
             {...props}
             className='toggle'
@@ -36,9 +42,9 @@ const MicLevelControlComponent = ({ micRate, setMicRate }) =>
             }}
           >
               <div className="circle-container">
-              <div className="circle"> </div>
-              <div className="circle"> </div>
-              <div className="circle"> </div>
+                  <div className={`circle ${isDragged ? 'active' : ''}`}> </div>
+                  <div className={`circle ${isDragged ? 'active' : ''}`}> </div>
+                  <div className={`circle ${isDragged ? 'active' : ''}`}> </div>
               </div>
           </div>
         )}

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Range } from 'react-range';
-import {  MicLevelControl } from './components/MicLevelControl'
+import { MicLevelControl } from './components/MicLevelControl'
+import { RangeSelector } from './components/RangeSelector';
 
 // import { string, func } from 'prop-types';
 
@@ -34,6 +34,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) =>
             <small className="text-muted">Spectrum: </small>
             {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
           </h3>
+          <RangeSelector />
           <h5 className="text-center">
             <small className="text-muted">Range: </small>{config.minRateDif}  / {config.maxRateDif}
           </h5>

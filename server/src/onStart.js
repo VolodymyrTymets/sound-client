@@ -3,7 +3,7 @@ const { NERVE, MUSCLE } = require('./constants');
 const { Mic } = require('./utils/Mic');
 const { SpectrumWorker } = require('./utils/SpectrumWorker');
 const { notify } = require('./utils/notifier');
-const { onMicStream  } = require('./utils/mic-srema-to-client');
+const { initControllers } =  require('./controllers/index');
 
 
 const onStart = (config, io) => {
@@ -29,8 +29,9 @@ const onStart = (config, io) => {
   };
 
   global.mic = new Mic(config,
-    onMicStream(config, io),
     (audioData) => spectrumWorker.start(audioData.channelData[0]));
+
+  initControllers(config, io);
 
 
   try {

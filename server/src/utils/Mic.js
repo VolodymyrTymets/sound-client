@@ -3,12 +3,11 @@ const WavDecoder = require('wav-decoder');
 const header = require('waveheader');
 
 class Mic {
-	constructor(config, onStream, onData) {
+	constructor(config, onData) {
 		this.log = this.log.bind(this);
 		this._config = config;
 		// this._startDate =  null;
 		this._onData = onData;
-		this._onStream = onStream
 
 	}
 
@@ -17,10 +16,13 @@ class Mic {
 		delete  this._micInstance;
 		this._micInstance = mic(this._config.mic);
 		this._micInputStream = this._micInstance.getAudioStream();
-		this._onStream(this._micInputStream);
     this._micInputStream.on('error', this.log);
 
 	}
+	getMicInputStream () {
+	  return this._micInputStream;
+    }
+
 	log(message) {
 		console.log(`-> [Mic]: ${message.message || message}`);
 		if (message.message) {

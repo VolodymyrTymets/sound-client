@@ -22,6 +22,11 @@ class MeanSpectrumOfBreath {
     this._minBreathTime = config.minBreathTime || this._minBreathTime;
     this._minRateDif = config.minRateDif || this._minRateDif;
   }
+  /** Call to refresh listening from scratch */
+  refreshListening () {
+    this._isListening = true;
+    this._statOfListen = new Date().getTime();
+  }
   listen(meanSpectrum, maxSpectrum) {
     if(!this._isListening) return;
 

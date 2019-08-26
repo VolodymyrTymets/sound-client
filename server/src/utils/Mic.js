@@ -1,6 +1,7 @@
 const mic = require('mic');
 const WavDecoder = require('wav-decoder');
 const header = require('waveheader');
+const { socketClients } = require('../utils/SocketClients');
 
 class Mic {
 	constructor(config, onData) {
@@ -36,9 +37,13 @@ class Mic {
 			// this._startDate = startDate;
 			this._createInstance();
 			this._micInputStream.on('data', buffer => {
-				WavDecoder.decode(Buffer.concat([header(this._config.mic.rate), buffer]))
-					.then(audioData => this._onData(audioData))
-					.catch(this._catch);
+				/** Calculate on server only if no clients is connected*/
+	    	if(!socketClients.isOneConnected()) {
+					WavDecoder.decode(Buffer.concat([header(this._config.mic.rate), buffer]))
+						.then(audioData => this._onData(audioData))
+						.catch(this._catch);
+				}
+
 			});
 			this._micInstance.start();
 		} catch (error) {

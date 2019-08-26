@@ -18,6 +18,9 @@ const SpectrumInfo = types
     saveSocket(socket) {
       meanSpectrumOfBreath.saveSocket(socket );
     },
+    refreshListening() {
+      meanSpectrumOfBreath.refreshListening()
+    },
     setMean(spectrum) {
       self.mean = parseInt(R.mean(spectrum), 10);
       self.max = R.reduce(R.max, 0, spectrum);

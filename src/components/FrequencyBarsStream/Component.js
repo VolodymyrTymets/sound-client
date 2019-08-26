@@ -2,7 +2,9 @@ import React from 'react';
 import { number } from 'prop-types';
 
 const FrequencyBarsComponent = ({  frequencyHeight, frequencyWidth }) => (
-  <canvas className="frequency-bars" width={frequencyWidth} height={frequencyHeight}></canvas>
+  <div className="d-flex flex-row">
+    <canvas className="frequency-bars" width={frequencyWidth} height={frequencyHeight}></canvas>
+  </div>
 );
 
 FrequencyBarsComponent.propTypes = {

@@ -24,7 +24,7 @@ const initControllers = (config, io) => {
 
         // actions
         client.on('micRate', onMicRate(config));
-        client.on('GPIONotify', onRLNNotify(config));
+        client.on('rln-type', onRLNNotify(config));
     });
 };
 

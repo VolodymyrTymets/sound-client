@@ -7,6 +7,7 @@ const RangeSelector = compose(
   withState('rate', 'setRate', [50 ,90]),
   withPropsOnChange(['rate'], ({ rate, store }) => {
       store.config.setRate(rate[0], rate[1]);
+      store.spectrumInfo.changeConfig({ minRateDif: rate[0] });
   }),
 )(RangeSelectorComponent);
 

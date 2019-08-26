@@ -53,7 +53,6 @@ export const App = compose(
         maxRateDif
       }) => {
         this.props.setStream(stream);
-
         this.props.config.setRate(minRateDif, maxRateDif);
         this.props.config.setMinBreathTime(minBreathTime);
         this.props.config.setMic(mic.rate, mic.channels, mic.device);

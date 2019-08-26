@@ -16,7 +16,7 @@ const config = {
   },
   spectrumWorker: {
     minRateDif: parseInt(process.env.MIN_RATE || 50), // %
-    maxRateDif: parseInt(process.env.MAx_RATE || 90), // %
+    maxRateDif: parseInt(process.env.MAX_RATE || 90), // %
     timeToLearn: 10, // seconds
   },
   notifier: {

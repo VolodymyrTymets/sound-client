@@ -11,7 +11,7 @@ const initControllers = (config, io) => {
         // send mic stream to client
         const stream = ss.createStream();
         const micInputStream = global.mic.getMicInputStream();
-        micInputStream.pipe(stream);
+              micInputStream && micInputStream.pipe(stream);
         ss(client).emit('mic-stream', stream, { mic: {
                 rate: config.mic.rate,
                 channels: config.mic.channels,

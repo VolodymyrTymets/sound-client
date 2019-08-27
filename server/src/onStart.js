@@ -33,7 +33,6 @@ const onStart = (config, io) => {
 
   initControllers(config, io);
 
-
   try {
     const Gpio = require('onoff').Gpio;
     switcher  = new Gpio(config.gpio.switcher, 'in', 'both');
@@ -52,6 +51,7 @@ const onStart = (config, io) => {
     console.log('----> !!Error -> GPIO is not detected!!!');
     startRecord();
   }
+  notify.muscleNotify();
 
   process.on('exit', () => {
     stopRecord();

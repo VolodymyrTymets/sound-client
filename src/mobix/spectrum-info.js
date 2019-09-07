@@ -15,6 +15,12 @@ const SpectrumInfo = types
     color: types.string,
   })
   .actions(self => ({
+    saveSocket(socket) {
+      meanSpectrumOfBreath.saveSocket(socket );
+    },
+    refreshListening() {
+      meanSpectrumOfBreath.refreshListening()
+    },
     setMean(spectrum) {
       self.mean = parseInt(R.mean(spectrum), 10);
       self.max = R.reduce(R.max, 0, spectrum);
@@ -37,6 +43,7 @@ const SpectrumInfo = types
       self.color = meanSpectrumOfBreath.getColor(self.meanOfBreathR);
       if(self.meanOfBreathR) {
         meanSpectrumOfBreath.soundNotify(self.meanOfBreathR);
+        meanSpectrumOfBreath.serverNotify(self.meanOfBreathR);
       }
     },
     changeConfig(config) {

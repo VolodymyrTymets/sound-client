@@ -12,7 +12,7 @@ const WindowInfo = types
     init() {
       const windowHeight = window.innerHeight;
       self.sineWaveHeight = (windowHeight * 0.4);
-      self.frequencyHeight = (windowHeight * 0.9);
+      self.frequencyHeight = (windowHeight * 0.7);
       self.sineWaveWidth = window.innerWidth;
       self.frequencyWidth = window.innerWidth / 2;
     },

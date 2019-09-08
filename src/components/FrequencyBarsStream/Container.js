@@ -1,5 +1,5 @@
 import * as R from "ramda";
-import { branch, compose, lifecycle, renderNothing, withProps, mapProps } from 'recompose';
+import {branch, compose, lifecycle, renderNothing, withProps, mapProps, withState} from 'recompose';
 import { FrequencyBarsComponent } from './Component';
 import { drawBar, getByteFrequencyData } from "./utils";
 import { inject, observer } from 'mobx-react';
@@ -19,9 +19,10 @@ export const FrequencyBars = compose(
     channels: config.mic.channels,
     minRateDif: config.minRateDif,
   })),
+  withState('isLoading', 'setIsLoading', true),
   lifecycle({
     componentDidMount() {
-      const { navigatorMicStream, fftSize, channels, rate, store, minRateDif } = this.props;
+      const { navigatorMicStream, fftSize, channels, rate, store, minRateDif, setIsLoading } = this.props;
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const analyser = audioCtx.createAnalyser();
 
@@ -31,6 +32,7 @@ export const FrequencyBars = compose(
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
       navigatorMicStream.on('data', async buffer => {
+        setIsLoading(false)
         const data = await getByteFrequencyData(audioCtx, analyser, buffer, fftSize, rate, channels);
         drawBar(data, store.spectrumInfo, minRateDif, canvasCtx, width, height, this.props.styles);
         store.spectrumInfo.setMean(data);

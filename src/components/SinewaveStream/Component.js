@@ -4,7 +4,7 @@ import { number } from 'prop-types';
 import { Loader } from '../Common/Loader'
 
 const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls, isLoading }) =>  {
-  return isLoading ? (
+  return (
     <div className="d-flex flex-row">
       {R.range(1, chunkCount + 1).map((index) =>
         imgUrls[chunkCount - index] && <img
@@ -19,8 +19,9 @@ const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls,
         width={sineWaveWidth / (chunkCount + 1)}
         height={sineWaveHeight}
       />
+      <Loader isLoading={isLoading} height={sineWaveHeight} width={sineWaveWidth} />
     </div>
-  ): <Loader />;
+  )
 }
 
 

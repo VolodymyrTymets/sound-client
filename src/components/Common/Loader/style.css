@@ -1,8 +1,11 @@
 .container-loader {
+    display: flex;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    background: white;
 }
 
 .icon-loader {
-    font-size: 15px;
+    font-size: 25px;
 }

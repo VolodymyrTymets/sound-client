@@ -6,6 +6,10 @@ const app = express();
 //const { micInputStream } = require('./src/mic');
 const { config } = require('./src/config');
 const { onStart } = require('./src/onStart');
+// api
+app.get('/api/v1/ping', (req, res) => {
+  res.send({ success: true  });
+});
 
 app.use(express.static(path.resolve(__dirname, './public/build/')));
 app.use(express.static(path.resolve(__dirname, './public/assets/')));

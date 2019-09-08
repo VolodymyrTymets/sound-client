@@ -1,5 +1,5 @@
 import { types } from "mobx-state-tree";
-
+const XS_SIZE = 568;
 const WindowInfo = types
   .model("WindowInfo", {
     sineWaveHeight: types.number,
@@ -7,14 +7,17 @@ const WindowInfo = types
     sineWaveWidth: types.number,
     frequencyWidth: types.number,
     isInteracted: types.boolean,
+    isFrequencyFullScreen: types.boolean,
   })
   .actions(self => ({
     init() {
+      console.log('------> ', window.innerWidth)
       const windowHeight = window.innerHeight;
       self.sineWaveHeight = (windowHeight * 0.4);
       self.frequencyHeight = (windowHeight * 0.7);
       self.sineWaveWidth = window.innerWidth;
-      self.frequencyWidth = window.innerWidth / 2;
+      self.frequencyWidth = window.innerWidth < XS_SIZE ? window.innerWidth : window.innerWidth / 2;
+      self.isFrequencyFullScreen = window.innerWidth < XS_SIZE ? true : false;
     },
     interactWithWindow () {
       self.isInteracted = true;
@@ -27,6 +30,7 @@ const windowInfo = WindowInfo.create({
   sineWaveWidth: 0,
   frequencyWidth: 0,
   isInteracted: false,
+  isFrequencyFullScreen: true,
 });
 
 export { windowInfo };

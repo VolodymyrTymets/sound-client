@@ -22,6 +22,7 @@ export const Sinewave = observer(compose(
     chunkCount: time * n,
   })),
   withState('imgUrl', 'setImgUrl'),
+  withState('isLoading', 'setIsLoading', true),
   withState('imgUrls', 'setImgUrls', []),
   withHandlers({
     changeUrls: ({ setImgUrls, imgUrls, chunkCount}) => (url) => {
@@ -34,7 +35,8 @@ export const Sinewave = observer(compose(
   }),
   lifecycle({
     async componentDidMount() {
-      const { navigatorMicStream, fftSize, rate, channels, sinewaveScale, setImgUrl, changeUrls } = this.props;
+      debugger
+      const { navigatorMicStream, fftSize, rate, channels, sinewaveScale, setImgUrl, changeUrls, setIsLoading } = this.props;
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const analyser = audioCtx.createAnalyser();
 
@@ -45,7 +47,8 @@ export const Sinewave = observer(compose(
 
       let interval = null;
       navigatorMicStream.on('data', async buffer => {
-
+        debugger
+        setIsLoading(false);
         const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, fftSize, rate, channels, sinewaveScale);
         drawWave(wave, canvasCtx, width, height, this.props.styles);
         interval = interval || setInterval(() => {
@@ -63,6 +66,7 @@ export const Sinewave = observer(compose(
     imgUrl: R.path(['imgUrl']),
     imgUrls: R.path(['imgUrls']),
     chunkCount: R.path(['chunkCount']),
+    isLoading: R.path(['isLoading']),
   })),
 )(SinewaveComponent));
 

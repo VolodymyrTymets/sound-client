@@ -20,13 +20,11 @@ const socket = socketClient(url);
 const AppComponent = ({ navigatorMicStream, spectrumInfo, config, windowInfo }) => {
   const className =  windowInfo.isFrequencyFullScreen ? 'flex-column' : 'flex-row';
   return (<div className="container-fluid" style={{padding: 10}}>
-    {config.mic.rate &&
-    <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color}/>}
+    <Sinewave navigatorMicStream={navigatorMicStream} color={spectrumInfo.color}/>
     <div
       className={`d-flex ${className}`}>
       <InfoBar socket={socket}/>
-      {config.mic.rate &&
-      <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} socket={socket}/>}
+      <FrequencyBars navigatorMicStream={navigatorMicStream} color={spectrumInfo.color} socket={socket}/>
     </div>
   </div>);
 };

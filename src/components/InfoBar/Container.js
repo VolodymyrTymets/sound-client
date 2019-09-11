@@ -16,7 +16,8 @@ const InfoBarContainer = compose(
         ratting: R.path(['store','spectrumInfo', 'meanOfBreathR']),
       }),
       ({ min, max, ratting }) => getDistance(min, max, ratting || 0),
-    )
+    ),
+    socket: R.path(['socket']),
   })),
 )(observer(InfoBarComponent));
 

@@ -15,7 +15,7 @@ export const Sinewave = observer(compose(
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 32768 / n,
+    fftSize: 32768,
     rate: config.mic.rate,
     channels: config.mic.channels,
     sinewaveScale: config.sinewaveScale,

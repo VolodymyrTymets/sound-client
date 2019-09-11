@@ -3,6 +3,7 @@ import {  soundStart, soundStop } from './soud-notify';
 
 class MeanSpectrumOfBreath {
   constructor(config) {
+    this._socket = null;
     this._statOfListen = null;
     this._isListening = true;
     this._time = config.timeToListen; // s
@@ -10,6 +11,7 @@ class MeanSpectrumOfBreath {
     this._minRateDif = config.minRateDif;
     this._lastColorNotificationDate = null;
     this._lastSoundNotificationDate = null;
+    this._lastSercerNotificationDate = null;
 
     this._means = [];
     this._mean = 0;
@@ -17,10 +19,18 @@ class MeanSpectrumOfBreath {
     this._max = 0;
     this.listen = this.listen.bind(this);
   }
+  saveSocket(socket){
+    this._socket = socket;
+  }
   changeConfig(config) {
     this._time = config.timeToListen || this._time; // s
     this._minBreathTime = config.minBreathTime || this._minBreathTime;
     this._minRateDif = config.minRateDif || this._minRateDif;
+  }
+  /** Call to refresh listening from scratch */
+  refreshListening () {
+    this._isListening = true;
+    this._statOfListen = new Date().getTime();
   }
   listen(meanSpectrum, maxSpectrum) {
     if(!this._isListening) return;
@@ -73,6 +83,22 @@ class MeanSpectrumOfBreath {
       }
     }
     return soundStop();
+  }
+  serverNotify(meanRating) {
+    this._lastSercerNotificationDate = this._lastSercerNotificationDate || new Date().getTime();
+    const diff = (new Date().getTime() - this._lastSercerNotificationDate);
+    if(meanRating > this._minRateDif) {
+      if(diff >= this._minBreathTime) {
+        this._lastSercerNotificationDate = new Date().getTime();
+        return this._socket.emit('rln-type', { type: 'nerve' })
+      }
+    }
+    if(meanRating > 1) {
+      if(diff >= this._minBreathTime) {
+        this._lastSercerNotificationDate = new Date().getTime();
+        return this._socket.emit('rln-type', { type: 'muscle' })
+      }
+    }
   }
 }
 

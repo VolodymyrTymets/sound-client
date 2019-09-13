@@ -1,17 +1,15 @@
 import React from 'react';
-import { compose } from "recompose";
-import { inject, useObserver } from "mobx-react";
+import MainPage from './pages/MainPage';
+import MainPageIos from './pages/MainPageIos';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import MainPage from './pages/MainPage';
-import { InteractWindow } from './components/InteractWindow';
 
-const App = ({ store }) => {
-	const { windowInfo } = store;
-	return useObserver(() => windowInfo.isInteracted ? <MainPage /> : <InteractWindow />)
+const isSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+const App = () => {
+	return isSafari() ? <MainPageIos/> : <MainPage />
 };
 
-export default compose(
-	inject('store'),
-)(App);
 
+
+export default App;

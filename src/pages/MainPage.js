@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { compose } from "recompose";
-import { inject, useObserver } from "mobx-react";
+import { compose, renderComponent, branch } from "recompose";
+import { inject, observer, useObserver } from "mobx-react";
 import ss from 'socket.io-stream';
 import socketClient from 'socket.io-client';
 
@@ -8,6 +8,7 @@ import { Sinewave } from '../components/SinewaveStream';
 import { FrequencyBars } from '../components/FrequencyBarsStream';
 import { InfoBar } from '../components/InfoBar';
 import { Loader } from '../components/common/Loader';
+import { InteractWindow } from '../components/InteractWindow';
 
 import { getByteTimeDomainData } from "../components/SinewaveStream/utils";
 import { getByteFrequencyData } from "../components/FrequencyBarsStream/utils";
@@ -17,7 +18,7 @@ const url = process.env.NODE_ENV === 'production' ?
 
 const socket = socketClient(url);
 const WAVE_FFT_SIZE = 32768;
-const SPECTRUM_FFT_SIZE = 512;
+const SPECTRUM_FFT_SIZE = 256;
 const MainPage = ({ store }) => {
 	const { config, spectrumInfo, windowInfo} = store;
 	const [wave, setWave] = useState([]);
@@ -29,6 +30,8 @@ const MainPage = ({ store }) => {
 		config.setUrl(url);
 		const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 		const analyser = audioCtx.createAnalyser();
+		const audioCtxSpectrum = new (window.AudioContext || window.webkitAudioContext)();
+		const analyserSpectrum = audioCtxSpectrum.createAnalyser();
 
 		ss(socketClient(url)).on('mic-stream', (stream, {
 			mic,
@@ -44,7 +47,7 @@ const MainPage = ({ store }) => {
 
 			stream.on('data', async buffer => {
 				const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, WAVE_FFT_SIZE, mic.rate, mic.channels, config.sinewaveScale);
-				const spectrum = await getByteFrequencyData(audioCtx, analyser, buffer, SPECTRUM_FFT_SIZE, mic.rate, mic.channels);
+				const spectrum = await getByteFrequencyData(audioCtxSpectrum, analyserSpectrum, buffer, SPECTRUM_FFT_SIZE, mic.rate, mic.channels);
 				setSpectrum(spectrum);
 				setWave(wave);
 				spectrumInfo.setMean(spectrum);
@@ -58,9 +61,8 @@ const MainPage = ({ store }) => {
 		<>
 			{ !isLoading ? (
 					<div className="container-fluid" style={{padding: 5}}>
-						<Sinewave color={spectrumInfo.color} wave={wave} />
-						<div
-							className={`d-flex ${className}`}>
+							<Sinewave color={spectrumInfo.color} wave={wave} />
+						<div className={`d-flex ${className}`}>
 							<InfoBar socket={socket}/>
 							<FrequencyBars color={spectrumInfo.color} spectrum={spectrum}/>
 						</div>
@@ -70,11 +72,10 @@ const MainPage = ({ store }) => {
 	));
 };
 
-
-// const AppBranch =  compose(
-// 	branch(({ store }) => !store.windowInfo.isInteracted, renderComponent(InteractWindow)),
-// )(observer(AppComponent));
-
 export default compose(
 	inject('store'),
+	// observer,
+	// branch(({ store }) => !store.windowInfo.isInteracted, renderComponent(InteractWindow)),
 )(MainPage);
+
+

@@ -7,7 +7,7 @@ import MainPageIos from './pages/MainPageIos';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const isSafari = () => /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+const isSafari = () => window.location.search.indexOf('ios') !== -1;
 
 const AndroidAppComponent = ({ store }) => {
 	const { windowInfo } = store;

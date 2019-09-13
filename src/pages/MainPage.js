@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { compose, renderComponent, branch } from "recompose";
-import { inject, observer, useObserver } from "mobx-react";
+import { compose } from "recompose";
+import { inject, useObserver } from "mobx-react";
 import ss from 'socket.io-stream';
 import socketClient from 'socket.io-client';
 
@@ -8,7 +8,6 @@ import { Sinewave } from '../components/SinewaveStream';
 import { FrequencyBars } from '../components/FrequencyBarsStream';
 import { InfoBar } from '../components/InfoBar';
 import { Loader } from '../components/common/Loader';
-import { InteractWindow } from '../components/InteractWindow';
 
 import { getByteTimeDomainData } from "../components/SinewaveStream/utils";
 import { getByteFrequencyData } from "../components/FrequencyBarsStream/utils";
@@ -61,8 +60,9 @@ const MainPage = ({ store }) => {
 		<>
 			{ !isLoading ? (
 					<div className="container-fluid" style={{padding: 5}}>
-							<Sinewave color={spectrumInfo.color} wave={wave} />
-						<div className={`d-flex ${className}`}>
+						<Sinewave color={spectrumInfo.color} wave={wave} />
+						<div
+							className={`d-flex ${className}`}>
 							<InfoBar socket={socket}/>
 							<FrequencyBars color={spectrumInfo.color} spectrum={spectrum}/>
 						</div>
@@ -74,8 +74,6 @@ const MainPage = ({ store }) => {
 
 export default compose(
 	inject('store'),
-	// observer,
-	// branch(({ store }) => !store.windowInfo.isInteracted, renderComponent(InteractWindow)),
 )(MainPage);
 
 

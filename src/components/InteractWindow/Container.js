@@ -1,6 +1,6 @@
 import * as R from 'ramda';
 import { compose, mapProps, withHandlers } from 'recompose';
-import { observer, inject } from 'mobx-react';
+import { inject } from 'mobx-react';
 import { InteractWindowComponent } from './Component';
 
 const InteractWindow = compose(
@@ -9,7 +9,7 @@ const InteractWindow = compose(
     windowInfo: R.path(['store','windowInfo']),
   })),
   withHandlers({
-    onInteractWithWindowClick: ({ windowInfo }) => () => windowInfo.interactWithWindow(),
+    onInteractWithWindowClick: ({ windowInfo }) => () => windowInfo.interactWithWindow()
   })
 )(InteractWindowComponent);
 

@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import React from 'react';
 import { number } from 'prop-types';
-import { Loader } from '../Common/Loader'
 
 const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls, isLoading }) =>  {
   return (
@@ -19,7 +18,6 @@ const SinewaveComponent = ({ sineWaveHeight, sineWaveWidth, chunkCount, imgUrls,
         width={sineWaveWidth / (chunkCount + 1)}
         height={sineWaveHeight}
       />
-      <Loader isLoading={isLoading} height={sineWaveHeight} width={sineWaveWidth} />
     </div>
   )
 }

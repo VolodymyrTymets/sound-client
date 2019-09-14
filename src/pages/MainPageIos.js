@@ -9,7 +9,7 @@ import socketClient from 'socket.io-client';
 import { Sinewave } from '../components/ios/SinewaveStream';
 import { FrequencyBars } from '../components/ios/FrequencyBarsStream';
 import { InfoBar } from '../components/InfoBar';
-import { Loader } from '../components/common/Loader';
+import { Loader } from '../components/Loader';
 import { InteractWindow } from '../components/InteractWindow';
 
 const url = process.env.NODE_ENV === 'production' ?

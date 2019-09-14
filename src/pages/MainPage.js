@@ -7,7 +7,8 @@ import socketClient from 'socket.io-client';
 import { Sinewave } from '../components/SinewaveStream';
 import { FrequencyBars } from '../components/FrequencyBarsStream';
 import { InfoBar } from '../components/InfoBar';
-import { Loader } from '../components/common/Loader';
+import { InteractWindow } from "../components/InteractWindow";
+import { Loader } from '../components/Loader';
 
 import { getByteTimeDomainData } from "../components/SinewaveStream/utils";
 import { getByteFrequencyData } from "../components/FrequencyBarsStream/utils";
@@ -18,7 +19,8 @@ const url = process.env.NODE_ENV === 'production' ?
 const socket = socketClient(url);
 const WAVE_FFT_SIZE = 32768;
 const SPECTRUM_FFT_SIZE = 256;
-const MainPage = ({ store }) => {
+
+const MainViewComponent = ({ store }) => {
 	const { config, spectrumInfo, windowInfo} = store;
 	const [wave, setWave] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
@@ -70,6 +72,15 @@ const MainPage = ({ store }) => {
 			}
 	  </>
 	));
+};
+
+const MainView = compose(
+	inject('store'),
+)(MainViewComponent);
+
+const MainPage = ({ store }) => {
+	const { windowInfo } = store;
+	return useObserver(() => windowInfo.isInteracted ? <MainView /> : <InteractWindow />)
 };
 
 export default compose(

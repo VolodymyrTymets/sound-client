@@ -1,4 +1,6 @@
 import { types } from "mobx-state-tree";
+import { getWindowSize } from '../utils/getWindowSize';
+
 const XS_SIZE = 568;
 const WindowInfo = types
   .model("WindowInfo", {
@@ -11,12 +13,13 @@ const WindowInfo = types
   })
   .actions(self => ({
     init() {
-      const windowHeight = window.innerHeight;
-      self.sineWaveHeight = (windowHeight * 0.4) || 250;
-      self.frequencyHeight = (windowHeight * 0.4) || 250;
-      self.sineWaveWidth = window.innerWidth;
-      self.frequencyWidth = window.innerWidth < XS_SIZE ? window.innerWidth : window.innerWidth / 2;
-      self.isFrequencyFullScreen = window.innerWidth < XS_SIZE ? true : false;
+      const windowSize = getWindowSize();
+
+      self.sineWaveHeight = (windowSize.height * 0.4);
+      self.frequencyHeight = (windowSize.height * 0.4);
+      self.sineWaveWidth = windowSize.width;
+      self.frequencyWidth = windowSize.width < XS_SIZE ? windowSize.width : windowSize.width / 2;
+      self.isFrequencyFullScreen = windowSize.width < XS_SIZE ? true : false;
     },
     interactWithWindow () {
       self.isInteracted = true;

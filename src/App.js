@@ -1,25 +1,17 @@
 import React from 'react';
-import { compose } from "recompose";
-import { inject, useObserver } from "mobx-react";
-import { InteractWindow } from './components/InteractWindow'
-import MainPage from './pages/MainPage';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import MainPageIos from './pages/MainPageIos';
+import MainPage from './pages/MainPage';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const isSafari = () => window.location.search.indexOf('ios') !== -1;
-
-const AndroidAppComponent = ({ store }) => {
-	const { windowInfo } = store;
-	return useObserver(() => windowInfo.isInteracted ? <MainPage /> : <InteractWindow />)
-};
-
-const AndroidApp = compose(
-	inject('store'),
-)(AndroidAppComponent);
-
 const App = () => {
-	return isSafari() ? <MainPageIos/> : <AndroidApp />
+	return (
+		<Router >
+			<Route path="/" exact component={MainPage} />
+			<Route path="/ios/" component={MainPageIos} />
+		</Router>
+	)
 };
 
 export default App;

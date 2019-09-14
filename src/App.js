@@ -1,17 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import MainPageIos from './pages/MainPageIos';
 import MainPage from './pages/MainPage';
+import MainPageIos from './pages/MainPageIos';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+const isSafari = () => window.location.pathname.indexOf('ios') !== -1;
+
 const App = () => {
-	return (
-		<Router >
-			<Route path="/" exact component={MainPage} />
-			<Route path="/ios/" component={MainPageIos} />
-		</Router>
-	)
+	return isSafari() ? <MainPageIos/> : <MainPage />
 };
 
 export default App;

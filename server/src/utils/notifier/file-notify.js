@@ -6,8 +6,6 @@ class WavFileNotifier {
   constructor() {
     this._filePath = {
       def: path.resolve(__dirname ,'../../../private/assets', './notification.wav'),
-      nerve: path.resolve(__dirname ,'../../assets', './nerve.wav'),
-      muscle: path.resolve(__dirname ,'../../assets', './muscle.wav'),
     };
     this._statOfPlay = null;
     this._duration = {};

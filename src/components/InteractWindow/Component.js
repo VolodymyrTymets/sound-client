@@ -12,7 +12,6 @@ const InteractWindowComponent = ({
   const size = useWindowSize();
   return size.height ? (
     <div onClick={onInteractWithWindowClick} className="interact-window" style={size}>
-      <p>{size.height}X{size.width}</p>
       <FontAwesomeIcon icon={faMicrophoneAlt} className="interact-window-icon"/>
       <p onClick={onInteractWithWindowClick}>Tap to start</p>
     </div>

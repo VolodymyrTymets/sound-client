@@ -15,7 +15,7 @@ const WindowInfo = types
     init() {
       const windowSize = getWindowSize();
 
-      self.sineWaveHeight = (windowSize.height * 0.4);
+      self.sineWaveHeight = (windowSize.height * 0.5);
       self.frequencyHeight = (windowSize.height * 0.4);
       self.sineWaveWidth = windowSize.width;
       self.frequencyWidth = windowSize.width < XS_SIZE ? windowSize.width : windowSize.width / 2;

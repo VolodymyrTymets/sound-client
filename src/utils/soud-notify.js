@@ -1,17 +1,21 @@
 let oscillator = null;
 const getOscillator = () => {
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const oscillator = audioCtx.createOscillator();
-  oscillator.type = 'square';
-  oscillator.frequency.setValueAtTime(2000, audioCtx.currentTime); // value in hertz
-  oscillator.connect(audioCtx.destination);
-  return oscillator;
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    oscillator.type = 'square';
+    oscillator.frequency.setValueAtTime(2000, audioCtx.currentTime); // value in hertz
+    oscillator.connect(audioCtx.destination);
+    return oscillator;
+  } catch (e) {
+    return  null
+  }
 };
 
 const soundStart = () => {
   if(!oscillator) {
     oscillator = getOscillator();
-    oscillator.start();
+    oscillator && oscillator.start();
   }
 };
 

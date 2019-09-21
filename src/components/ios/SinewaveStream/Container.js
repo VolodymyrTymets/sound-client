@@ -5,17 +5,17 @@ import { SinewaveComponent } from './Component';
 import { drawWave, getByteTimeDomainData } from "./utils";
 
 const n = 2;
-const time = 15; //seconds
+const time = 10; //seconds
 export const Sinewave = observer(compose(
   inject('store'),
   branch(({ navigatorMicStream }) => R.isNil(navigatorMicStream), renderNothing),
   withProps(({ color, store: { spectrumInfo, config }}) => ({
     styles: {
-      fillStyle: 'white', //fillStyle, // background
+      fillStyle: '#d6d8d9', //fillStyle, // background
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 32768,
+    fftSize: 32768 / 2,
     rate: config.mic.rate,
     channels: config.mic.channels,
     sinewaveScale: config.sinewaveScale,

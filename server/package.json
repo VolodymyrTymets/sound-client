@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "PORT=3001 MIC_NAME=hw MID_DEVICE=Mic CARD=0 MIC_CHANNELS=2 node app.js",
-    "start-usb": "PORT=3001 MIN_RATE=30 MAX_RATE=70 BT=500 MIC_NAME=hw CARD=2 MID_DEVICE=Mic MIC_CHANNELS=1 node app.js",
-    "start-raspi": "PORT=3001 MIN_RATE=30 MAX_RATE=70 BT=500 MIC_NAME=hw MID_DEVICE=Mic CARD=1 MIC_CHANNELS=1 node app.js",
+    "start-usb": "PORT=3001 MIN_RATE=10 MAX_RATE=50 BT=500 MIC_NAME=hw CARD=2 MID_DEVICE=Mic MIC_CHANNELS=1 node app.js",
+    "start-raspi": "PORT=3001 MIN_RATE=10 MAX_RATE=50 BT=500 MIC_NAME=hw MID_DEVICE=Mic CARD=1 MIC_CHANNELS=1 node app.js",
     "record": "MIC_NAME=hw MID_DEVICE=Mic CARD=1  MIC_CHANNELS=1 node ./src/utils/recorder/record.js",
     "killpm2": "pm2 stop sound-client",
-    "autorun": "export PORT=3001 MIC_NAME=hw  MID_DEVICE=Mic CARD=1 MIC_CHANNELS=1 MIN_RATE=30 MAX_RATE=70 BT=300 && pm2 start app.js --name 'RLN-detector'",
+    "autorun": "export PORT=3001 MIC_NAME=hw  MID_DEVICE=Mic CARD=1 MIC_CHANNELS=1 MIN_RATE=10 MAX_RATE=50 BT=300 && pm2 start app.js --name 'RLN-detector'",
     "convert": "node ./src/utils/recorder/convert.js",
     "parse": "node ./src/utils/recorder/parse.js",
     "test": "echo \"Error: no test specified\" && exit 1"

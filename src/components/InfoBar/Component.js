@@ -5,7 +5,6 @@ import { useWindowSize } from '../../hooks/useWindowSize';
 
 const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
     const size = useWindowSize();
-    console.log('size ->', size)
     const style = {
        maxWidth: size.width,
        maxHeight: size.height

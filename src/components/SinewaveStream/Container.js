@@ -5,7 +5,10 @@ import { SinewaveComponent } from './Component';
 import { drawWave } from "./utils";
 
 const n = 2;
-const time = 10; //seconds
+const time = 5; //seconds
+let chunkCount = 0;
+const chunkCountsPerSecond = 5;
+
 export const Sinewave = observer(compose(
   inject('store'),
   withProps(({ color, store: { config }}) => ({
@@ -14,7 +17,7 @@ export const Sinewave = observer(compose(
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
       lineWidth: 1,
     },
-    fftSize: 32768 / 2,
+    fftSize: 32768,
     rate: config.mic.rate,
     channels: config.mic.channels,
     sinewaveScale: config.sinewaveScale,
@@ -30,26 +33,21 @@ export const Sinewave = observer(compose(
       setImgUrls(urls)
     }
   }),
-  withPropsOnChange(['wave'], ({ wave, styles }) => {
+  withPropsOnChange(['wave'], ({ wave, styles, changeUrls, fftSize }) => {
     const canvas = document.querySelector('.sinewave');
-    if(!canvas) return
+    if(!canvas) return;
     const { width, height } = canvas;
     const canvasCtx = canvas.getContext("2d");
     drawWave(wave, canvasCtx, width, height, styles);
-  }),
-  lifecycle({
-    async componentDidMount() {
-      const { fftSize, changeUrls } = this.props;
-      const canvas = document.querySelector('.sinewave');
-      const { width, height  } = canvas;
-      const canvasCtx = canvas.getContext("2d");
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-      setInterval(() => {
-        const url = canvas.toDataURL();
-        changeUrls(url);
-      }, (fftSize / 44100)  * 1000)
-    },
+    // draw wave in time
+    chunkCount ++;
+    if(chunkCount > chunkCountsPerSecond) {
+      const url = canvas.toDataURL();
+      changeUrls(url);
+      chunkCount = 0
+    }
+
   }),
   mapProps(R.applySpec({
     sineWaveHeight: R.path(['store', 'windowInfo', 'sineWaveHeight']),

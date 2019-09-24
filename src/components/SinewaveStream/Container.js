@@ -33,7 +33,7 @@ export const Sinewave = observer(compose(
       setImgUrls(urls)
     }
   }),
-  withPropsOnChange(['wave'], ({ wave, styles, changeUrls, fftSize }) => {
+  withPropsOnChange(['wave'], ({ wave, styles, changeUrls }) => {
     const canvas = document.querySelector('.sinewave');
     if(!canvas) return;
     const { width, height } = canvas;

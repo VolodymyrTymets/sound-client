@@ -9,9 +9,11 @@ class MeanSpectrumOfBreath {
     this._time = config.timeToListen; // s
     this._minBreathTime = config.minBreathTime;
     this._minRateDif = config.minRateDif;
+    this._maxRateDif = config.maxRateDif;
     this._lastColorNotificationDate = null;
     this._lastSoundNotificationDate = null;
     this._lastSercerNotificationDate = null;
+    this._lastServerNotificationType = 'muscle';
 
     this._means = [];
     this._mean = 0;
@@ -26,6 +28,7 @@ class MeanSpectrumOfBreath {
     this._time = config.timeToListen || this._time; // s
     this._minBreathTime = config.minBreathTime || this._minBreathTime;
     this._minRateDif = config.minRateDif || this._minRateDif;
+    this._maxRateDif = config.maxRateDif || this._maxRateDif;
   }
   /** Call to refresh listening from scratch */
   refreshListening () {
@@ -69,7 +72,7 @@ class MeanSpectrumOfBreath {
     const diff = (new Date().getTime() - this._lastColorNotificationDate);
     if(meanRating > this._minRateDif) {
       if(diff >= this._minBreathTime) {
-        return `rgb(255, ${155 - (meanRating + 15) || 0},  ${155 - (meanRating + 15) || 0})`; // red
+        return 'rgb(255, 155, 155)'; // red
       }
     }
     return 'black'; //`rgb(${155}, 255, ${155})`; // green
@@ -77,7 +80,7 @@ class MeanSpectrumOfBreath {
   soundNotify(meanRating) {
     this._lastSoundNotificationDate = this._lastSoundNotificationDate || new Date().getTime();
     const diff = (new Date().getTime() - this._lastSoundNotificationDate);
-    if(meanRating > this._minRateDif) {
+    if(meanRating > this._maxRateDif) {
       if(diff >= this._minBreathTime) {
         return soundStart();
       }
@@ -88,15 +91,25 @@ class MeanSpectrumOfBreath {
     this._lastSercerNotificationDate = this._lastSercerNotificationDate || new Date().getTime();
     const diff = (new Date().getTime() - this._lastSercerNotificationDate);
     if(meanRating > this._minRateDif) {
+      const nerveType = 'nerve';
       if(diff >= this._minBreathTime) {
         this._lastSercerNotificationDate = new Date().getTime();
-        return this._socket.emit('rln-type', { type: 'nerve' })
+        if(this._lastServerNotificationType !== nerveType) {
+          this._lastServerNotificationType = nerveType;
+          this._socket.emit('rln-type', {type: nerveType})
+        }
+        return;
       }
     }
     if(meanRating > 1) {
+      const muscleType = 'muscle';
       if(diff >= this._minBreathTime) {
         this._lastSercerNotificationDate = new Date().getTime();
-        return this._socket.emit('rln-type', { type: 'muscle' })
+        if(this._lastServerNotificationType !== muscleType) {
+          this._lastServerNotificationType = muscleType;
+          this._socket.emit('rln-type', {type: muscleType})
+        }
+        return;
       }
     }
   }

@@ -67,7 +67,7 @@ class MeanSpectrumOfBreath {
   }
   /** Change color only after little latency breath of people**/
   getColor(meanRating) {
-    if(this._isListening) return '#c6c8ca'; //grey
+    if(this._isListening) return '#6c757d'; //grey
     this._lastColorNotificationDate = this._lastColorNotificationDate || new Date().getTime();
     const diff = (new Date().getTime() - this._lastColorNotificationDate);
     if(meanRating > this._minRateDif) {

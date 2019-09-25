@@ -31,7 +31,7 @@ const AppComponent = ({ windowInfo, navigatorMicStream, spectrumInfo, config }) 
 
 const AppBranch = compose(
 	branch(({ windowInfo }) => !windowInfo.isInteracted, renderComponent(InteractWindow)),
-)(observer(AppComponent));
+)(AppComponent);
 
 export const App = compose(
 	inject('store'),

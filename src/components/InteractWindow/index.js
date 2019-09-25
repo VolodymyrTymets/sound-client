@@ -1,2 +1,2 @@
-export { InteractWindow } from "./Container";
+export { default as InteractWindow } from "./InteractWindow";
 

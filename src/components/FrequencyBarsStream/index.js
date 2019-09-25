@@ -1,2 +1,2 @@
-export { FrequencyBars } from "./Container";
+export { default as FrequencyBars } from "./FrequencyBarsStream";
 

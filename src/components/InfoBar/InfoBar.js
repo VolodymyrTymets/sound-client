@@ -1,9 +1,16 @@
 import React from 'react';
-import { MicLevelControl } from './components/MicLevelControl'
-import { RangeSelector } from './components/RangeSelector';
+import MicLevelControl from './components/MicLevelControl/MicLevelControl'
+import RangeSelector from './components/RangeSelector';
 import { useWindowSize } from '../../hooks/useWindowSize';
+import { inject, observer } from "mobx-react";
+import { compose } from "ramda";
+import { getDistance } from '../../utils/distance-getter/get-distance';
 
-const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
+const InfoBarComponent = ({ store, socket }) => {
+    const { spectrumInfo, config } = store;
+    const { minRateDif, maxRateDif } = config;
+    const ratting = spectrumInfo.meanOfBreathR || 0;
+    const distance = getDistance(minRateDif, maxRateDif, ratting);
     const size = useWindowSize();
     const style = {
        maxWidth: size.width,
@@ -26,7 +33,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
                   </h3>
                   <h5 className="text-center">
                       <small className="text-muted">Range:</small>
-                      {config.minRateDif} / {config.maxRateDif}
+                      {minRateDif} / {maxRateDif}
                   </h5>
                   <RangeSelector/>
               </div>
@@ -39,8 +46,6 @@ const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
     );
 };
 
-InfoBarComponent.propTypes = {
-
-};
-
-export { InfoBarComponent };
+export default observer(compose(
+  inject('store'),
+)(InfoBarComponent));

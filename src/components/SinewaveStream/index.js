@@ -1,2 +1,2 @@
-export { Sinewave } from "./Container";
+export { default as Sinewave } from "./SinewaveStream";
 

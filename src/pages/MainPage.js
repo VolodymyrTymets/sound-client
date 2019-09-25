@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { compose } from "recompose";
+import { compose } from "ramda";
 import { inject, useObserver } from "mobx-react";
 import ss from 'socket.io-stream';
 import socketClient from 'socket.io-client';

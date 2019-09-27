@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as R from "ramda";
 import ss from 'socket.io-stream';
 import socketClient from 'socket.io-client';
+import mainConfig from '../config';
 
 import { Sinewave } from '../components/SinewaveStream';
 import { FrequencyBars } from '../components/FrequencyBarsStream';
@@ -14,30 +15,17 @@ import { getByteFrequencyData } from "../components/FrequencyBarsStream/utils";
 import { getWindowSize } from "../utils/getWindowSize";
 import { MeanSpectrumOfBreath } from "../utils/MeanSpectrumOfBreath";
 
-const staticConfig = {
-	timeToListen: 10, // seconds
-	minRateDif: 20, // %
-	maxRateDif: 50, // %
-	sinewaveScale: 1.9,
-	minBreathTime: 100 // miliseconds
-};
-
-
-const meanSpectrumOfBreath = new MeanSpectrumOfBreath(staticConfig);
+const meanSpectrumOfBreath = new MeanSpectrumOfBreath(mainConfig);
 
 const url = process.env.NODE_ENV === 'production' ?
 	`${window.location.hostname}:${window.location.port}` : `${window.location.hostname}:3001`;
-
 const socket = socketClient(url);
-const WAVE_FFT_SIZE = 32768;
-const SPECTRUM_FFT_SIZE = 256;
-const MAX_SPECTRUM_OF_MIC = 100;
 
 const MainView = ({ windowInfo }) => {
-	const [wave, setWave] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const [wave, setWave] = useState([]);
 	const [spectrum, setSpectrum] = useState([]);
-	const [config, setConfig] = useState(staticConfig);
+	const [config, setConfig] = useState(mainConfig);
 	const [color, setColor] = useState('');
 	const [meanOfBreathR, setMeanOfBreathR] = useState(0);
 	const [spectrumInfo, setSpectruminfo] = useState({});
@@ -57,21 +45,20 @@ const MainView = ({ windowInfo }) => {
 			maxRateDif
 		}) => {
 			setConfig({
-				...staticConfig,
+				...mainConfig,
 				minRateDif,
 				maxRateDif,
 				minBreathTime,
 			});
 
 			stream.on('data', async buffer => {
-				const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, WAVE_FFT_SIZE, mic.rate, mic.channels, config.sinewaveScale);
-				const spectrum = await getByteFrequencyData(audioCtxSpectrum, analyserSpectrum, buffer, SPECTRUM_FFT_SIZE, mic.rate, mic.channels);
+				const wave = await getByteTimeDomainData(audioCtx, analyser, buffer, config.fftSize, mic.rate, mic.channels, mainConfig.sinewaveScale);
+				const spectrum = await getByteFrequencyData(audioCtxSpectrum, analyserSpectrum, buffer, mainConfig.spectrumFftSize, mic.rate, mic.channels);
 				setSpectrum(spectrum);
 				setWave(wave);
 
-
-				//spectrumInfo.setMean(spectrum);
-       let _meanOfBreathR = meanOfBreath;
+        // todo: move it into util
+		    let _meanOfBreathR = meanOfBreath;
 
 				const mean = parseInt(R.mean(spectrum), 10);
 				const max = R.reduce(R.max, 0, spectrum);
@@ -83,8 +70,8 @@ const MainView = ({ windowInfo }) => {
 				if(meanOfBreath) {
 					/** taking into account that max spectrum of mic can't be > 100, need to calculate how much spectrum of breath
 					 *  of stimulation bigger than spectrum of normal breath, from range that left.*/
-					const left = MAX_SPECTRUM_OF_MIC - mean;
-					const leftMean = MAX_SPECTRUM_OF_MIC - meanOfBreath;
+					const left = mainConfig.MAX_SPECTRUM_OF_MIC - mean;
+					const leftMean = mainConfig.MAX_SPECTRUM_OF_MIC - meanOfBreath;
 					const newRating = parseInt(100 - (left * 100) / leftMean, 10) || 0;
 					if(leftMean > left) {
 						_meanOfBreathR = newRating;
@@ -111,7 +98,7 @@ const MainView = ({ windowInfo }) => {
 	}, []);
 
 	function onRateChange(minRateDif, maxRateDif) {
-		setConfig({ ...staticConfig, minRateDif, maxRateDif });
+		setConfig({ ...mainConfig, minRateDif, maxRateDif });
 	}
 
 	const className =  windowInfo.isFrequencyFullScreen ? 'flex-column' : 'flex-row';
@@ -130,7 +117,6 @@ const MainView = ({ windowInfo }) => {
 	  </>
 	);
 };
-
 
 const XS_SIZE = 568;
 const MainPage = () => {
@@ -152,4 +138,3 @@ const MainPage = () => {
 };
 
 export default MainPage
-

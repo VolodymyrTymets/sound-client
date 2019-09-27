@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { getTrackBackground, Range} from 'react-range';
-import { inject, observer } from "mobx-react";
-import { compose } from "ramda";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophoneAlt } from '@fortawesome/free-solid-svg-icons';
 import './style.css';
 
-const MicLevelControlComponent = ({ store, socket }) => {
-  const { spectrumInfo } = store;
+const MicLevelControlComponent = ({  socket, meanSpectrumOfBreath }) => {
   const [micRate, setMicRate] = useState(50);
 
   useEffect(() => {
     socket.emit('micRate', { micRate: parseInt(micRate) });
-    spectrumInfo.refreshListening();
+    meanSpectrumOfBreath.refreshListening();
   }, [micRate]);
 
   return (
@@ -66,6 +63,4 @@ const MicLevelControlComponent = ({ store, socket }) => {
   );
 };
 
-export default observer(compose(
-  inject('store'),
-)(MicLevelControlComponent));
+export default MicLevelControlComponent;

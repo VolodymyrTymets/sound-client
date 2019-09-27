@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from "react";
-import { compose } from "ramda";
-import { inject, observer } from 'mobx-react';
 import { drawBar } from "./utils";
 
-const FrequencyBarsStream = ({ spectrum, store, color }) => {
-	const { windowInfo } = store;
+const FrequencyBarsStream = ({ spectrum, windowInfo, color }) => {
 	const { frequencyHeight, frequencyWidth } = windowInfo;
 	const canvas = useRef(null);
 
@@ -29,6 +26,4 @@ const FrequencyBarsStream = ({ spectrum, store, color }) => {
 	)
 };
 
-export default observer(compose(
-	inject('store'),
-)(FrequencyBarsStream));
+export default FrequencyBarsStream;

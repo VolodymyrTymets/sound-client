@@ -2,12 +2,9 @@ import React from 'react';
 import MicLevelControl from './components/MicLevelControl/MicLevelControl'
 import RangeSelector from './components/RangeSelector';
 import { useWindowSize } from '../../hooks/useWindowSize';
-import { inject, observer } from "mobx-react";
-import { compose } from "ramda";
 import { getDistance } from '../../utils/distance-getter/get-distance';
 
-const InfoBarComponent = ({ store, socket }) => {
-    const { spectrumInfo, config } = store;
+const InfoBarComponent = ({ meanSpectrumOfBreath, color, spectrumInfo, socket, config, onRateChange }) => {
     const { minRateDif, maxRateDif } = config;
     const ratting = spectrumInfo.meanOfBreathR || 0;
     const distance = getDistance(minRateDif, maxRateDif, ratting);
@@ -19,10 +16,10 @@ const InfoBarComponent = ({ store, socket }) => {
 
     return (
       <div className="d-flex flex-column align-items-t flex-fill" style={style}>
-        <h1 className="text-center" style={{color: spectrumInfo.color}}>
+        <h1 className="text-center" style={{ color }}>
             {distance !== null ? `${distance} mm` : '-'}
         </h1>
-        <MicLevelControl socket={socket}/>
+        <MicLevelControl socket={socket} meanSpectrumOfBreath={meanSpectrumOfBreath} />
         {spectrumInfo.timeLeft <= 0 ?
           <div>
 
@@ -35,7 +32,7 @@ const InfoBarComponent = ({ store, socket }) => {
                       <small className="text-muted">Range:</small>
                       {minRateDif} / {maxRateDif}
                   </h5>
-                  <RangeSelector/>
+                  <RangeSelector meanSpectrumOfBreath={meanSpectrumOfBreath} config={config} onRateChange={onRateChange} />
               </div>
           </div> :
           <div className="flex-fill d-flex flex-column">
@@ -46,6 +43,4 @@ const InfoBarComponent = ({ store, socket }) => {
     );
 };
 
-export default observer(compose(
-  inject('store'),
-)(InfoBarComponent));
+export default InfoBarComponent;

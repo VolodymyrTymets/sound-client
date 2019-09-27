@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { compose, range } from 'ramda';
-import { inject, observer } from "mobx-react";
+import { range } from 'ramda';
 import { drawWave } from "./utils";
 import './style.css';
 
@@ -8,8 +7,7 @@ const time = 10; //seconds
 let chunkCount = 0;
 const chunkCountsPerSecond = 5;
 
-const Sinewave = ({ store, wave, color }) => {
-  const { windowInfo } = store;
+const Sinewave = ({ wave, color, windowInfo }) => {
   const { sineWaveHeight, sineWaveWidth } = windowInfo;
   const canvas = useRef(null);
   const [imgUrls, setImgUrls] = useState([]);
@@ -58,7 +56,5 @@ const Sinewave = ({ store, wave, color }) => {
   )
 };
 
-export default observer(compose(
-  inject('store'),
-)(Sinewave));
+export default Sinewave
 

@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Range, getTrackBackground } from 'react-range';
 import './MicLevelControl/style.css';
-import { inject, observer } from "mobx-react";
-import { compose } from "ramda";
 
 const STEP = 5;
 const MIN = 0;
 const MAX = 100;
 
-const RangeSelectorComponent = ({ store }) => {
-  const { config, spectrumInfo } = store;
+const RangeSelectorComponent = ({ meanSpectrumOfBreath, config, onRateChange }) => {
   const [rate, setRate] = useState([config.minRateDif, config.maxRateDif]);
 
   useEffect(() => {
-    config.setRate(rate[0], rate[1]);
-    spectrumInfo.changeConfig({ minRateDif: rate[0] });
+    onRateChange(rate[0], rate[1]);
+    meanSpectrumOfBreath.changeConfig({ minRateDif: rate[0] });
   }, [rate]);
-
 
   return (
     <div className="d-flex flex-row">
@@ -72,6 +68,4 @@ const RangeSelectorComponent = ({ store }) => {
   );
 };
 
-export default observer(compose(
-  inject('store'),
-)(RangeSelectorComponent));
+export default RangeSelectorComponent

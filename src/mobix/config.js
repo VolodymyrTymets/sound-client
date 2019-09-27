@@ -26,9 +26,9 @@ const Config = types
     setMic(rate, channels, device) {
       self.mic = { rate, channels, device };
     },
-    setUrl(url) {
-      self.url = url;
-    },
+    // setUrl(url) {
+    //   self.url = url;
+    // },
     setRate(min = staticConfig.minRateDif, max = staticConfig.maxRateDif) {
       self.minRateDif = min;
       self.maxRateDif = max;

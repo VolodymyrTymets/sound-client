@@ -11,7 +11,8 @@ import { Loader } from '../Loader';
 import { getByteTimeDomainData } from "../SinewaveStream/utils";
 import { getByteFrequencyData } from "../FrequencyBarsStream/utils";
 import { meanSpectrumOfBreath } from "../../utils/MeanSpectrumOfBreath";
-import { getSpectrumInfo } from './utils'
+import { getSpectrumInfo } from './utils';
+import './style.css';
 
 const url = process.env.NODE_ENV === 'production' ?
 	`${window.location.hostname}:${window.location.port}` : `${window.location.hostname}:3001`;
@@ -65,7 +66,7 @@ const MainView = ({ windowInfo }) => {
 	return (
 		<>
 			{ !isLoading ? (
-				<div className="container-fluid" style={{padding: 5}}>
+				<div className="container-fluid main-view" style={{padding: 5}}>
 					<Sinewave windowInfo={windowInfo} color={spectrumInfo.color} wave={wave} />
 					<div
 						className={`d-flex ${className}`}>

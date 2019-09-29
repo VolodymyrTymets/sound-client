@@ -1,0 +1,15 @@
+.interact-window {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+}
+.interact-window p {
+  font-size: xx-large;
+}
+.interact-window-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}

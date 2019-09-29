@@ -1,0 +1,12 @@
+.container-loader {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+}
+
+.icon-loader {
+    font-size: 50px;
+    color: rgb(70, 48, 235);
+}

@@ -66,7 +66,7 @@ const MainView = ({ windowInfo }) => {
 	return (
 		<>
 			{ !isLoading ? (
-				<div className="container-fluid main-view" style={{padding: 5}}>
+				<div className="container-fluid main-view" style={{padding: 0}}>
 					<Sinewave windowInfo={windowInfo} color={spectrumInfo.color} wave={wave} />
 					<div
 						className={`d-flex ${className}`}>

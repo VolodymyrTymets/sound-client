@@ -38,7 +38,7 @@ const Sinewave = ({ wave, color, windowInfo }) => {
 
 
   return (
-    <div className="d-flex flex-row sinewave-container">
+    <div className="d-flex flex-row sinewave-container" style={{marginTop: 5}}>
       {range(1, time + 1).map((index) =>
         imgUrls[time - index] && <img
           src={imgUrls[time - index]}

@@ -1,5 +1,6 @@
 import * as R from "ramda";
-import {  soundStart, soundStop } from './soud-notify';
+import { soundStart, soundStop } from './soud-notify';
+import config from '../config'
 
 class MeanSpectrumOfBreath {
   constructor(config) {
@@ -115,4 +116,5 @@ class MeanSpectrumOfBreath {
   }
 }
 
-export { MeanSpectrumOfBreath };
+const meanSpectrumOfBreath = new MeanSpectrumOfBreath(config);
+export { meanSpectrumOfBreath };

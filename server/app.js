@@ -12,8 +12,8 @@ app.get('/api/v1/ping', (req, res) => {
   res.send({ success: true });
 });
 
-app.use(express.static(path.resolve(__dirname, './public/build-ios/')));
 app.use(express.static(path.resolve(__dirname, './public/build/')));
+app.use(express.static(path.resolve(__dirname, './public/build-ios/')));
 app.use(express.static(path.resolve(__dirname, './public/assets/')));
 app.get('/ios', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public/build-ios/', './index.html'));

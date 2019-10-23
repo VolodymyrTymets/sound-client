@@ -36,7 +36,6 @@ const Sinewave = ({ wave, color, windowInfo }) => {
     }
   },[wave]);
 
-
   return (
     <div className="d-flex flex-row sinewave-container" style={{marginTop: 5}}>
       {range(1, time + 1).map((index) =>

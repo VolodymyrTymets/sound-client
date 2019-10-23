@@ -5,8 +5,8 @@ const getWindowSize = () => {
 	const queryWidth = parsed.width ? parseInt(parsed.width, 10) : 0;
 	const queryHeight = parsed.height ? parseInt(parsed.height, 10) : 0;
 	return {
-		height: queryHeight || window.innerHeight,
-		width: queryWidth || window.innerWidth
+		height: queryHeight || window.outerHeight,
+		width: queryWidth || window.outerWidth
 	}
 };
 export { getWindowSize };

@@ -49,8 +49,9 @@ const onStart = (config, io) => {
     });
   } catch (e) {
     console.log('----> !!Error -> GPIO is not detected!!!');
-    startRecord();
+    //startRecord();
   }
+  startRecord();
   notify.muscleNotify();
 
   process.on('exit', () => {

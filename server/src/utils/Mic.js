@@ -38,11 +38,11 @@ class Mic {
 			this._createInstance();
 			this._micInputStream.on('data', buffer => {
 				/** Calculate on server only if no clients is connected*/
-	    	if(!socketClients.isOneConnected()) {
-					WavDecoder.decode(Buffer.concat([header(this._config.mic.rate), buffer]))
-						.then(audioData => this._onData(audioData))
-						.catch(this._catch);
-				}
+``	    	// if(!socketClients.isOneConnected()) {
+				// 	WavDecoder.decode(Buffer.concat([header(this._config.mic.rate), buffer]))
+				// 		.then(audioData => this._onData(audioData))
+				// 		.catch(this._catch);
+				// }
 
 			});
 			this._micInstance.start();

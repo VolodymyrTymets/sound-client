@@ -3,6 +3,7 @@ import MicLevelControl from './components/MicLevelControl/MicLevelControl'
 import RangeSelector from './components/RangeSelector';
 import { useWindowSize } from '../../hooks/useWindowSize';
 import { getDistance } from '../../utils/distance-getter/get-distance';
+import './style.css';
 
 const InfoBarComponent = ({ meanSpectrumOfBreath, color, spectrumInfo, socket, config, onRateChange }) => {
     const { minRateDif, maxRateDif } = config;
@@ -26,7 +27,7 @@ const InfoBarComponent = ({ meanSpectrumOfBreath, color, spectrumInfo, socket, c
               <div className="d-flex flex-column ">
                   <h3 className="text-center">
                       <small className="text-muted">Spectrum:</small>
-                      {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
+	                  {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = <span className="info-bar-spectrum-span">{spectrumInfo.meanOfBreathR}</span> %
                   </h3>
                   <h5 className="text-center">
                       <small className="text-muted">Range:</small>

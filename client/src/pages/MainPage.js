@@ -17,6 +17,20 @@ const MainPage = () => {
 		  frequencyWidth: windowSize.width < XS_SIZE ? windowSize.width : windowSize.width / 2,
 		  isFrequencyFullScreen: windowSize.width < XS_SIZE ? true : false,
 		})
+
+		window.addEventListener('resize', () => {
+			const windowSize = getWindowSize();
+			console.log('isFrequencyFullScreen',windowSize.width)
+			console.log('isFrequencyFullScreen', windowSize.width < XS_SIZE ? true : false,)
+			setWindowInfo({
+				sineWaveHeight: (windowSize.height * 0.5),
+				frequencyHeight: (windowSize.height * 0.4),
+				sineWaveWidth: windowSize.width,
+				frequencyWidth: windowSize.width < XS_SIZE ? windowSize.width : windowSize.width / 2,
+				isFrequencyFullScreen: windowSize.width < XS_SIZE ? true : false,
+			})
+		})
+
 	}, []);
 
 	return isInteracted ? <MainView windowInfo={windowInfo} /> : <InteractWindow onClick={() => setIsInteracted(true)} />

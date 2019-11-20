@@ -32,7 +32,7 @@ const getSpectrumInfo = (spectrum) => {
 		meanSpectrumOfBreath.serverNotify(newSpectrumInfo.meanOfBreathR);
 	}
 
-	return { ...newSpectrumInfo, timeLeft, mean, meanOfBreath }
+	return { ...newSpectrumInfo, timeLeft, meanSpectrum, meanOfBreath }
 };
 
 export { getSpectrumInfo };

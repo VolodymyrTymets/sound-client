@@ -51,7 +51,7 @@ const MainView = ({ windowInfo }) => {
 				setSpectrum(spectrum);
 				setWave(wave);
 
-				const spectrumInfo =  getSpectrumInfo(spectrum);
+				const spectrumInfo = getSpectrumInfo(spectrum);
 				setSpectrumInfo(spectrumInfo);
 				setIsLoading(false);
 			})

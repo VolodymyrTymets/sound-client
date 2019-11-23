@@ -27,7 +27,7 @@ const InfoBarComponent = ({ meanSpectrumOfBreath, color, spectrumInfo, socket, c
               <div className="d-flex flex-column ">
                   <h3 className="text-center">
                       <small className="text-muted">Spectrum:</small>
-	                  {spectrumInfo.meanOfBreath} / <span className="info-bar-spectrum-span"> {spectrumInfo.meanSpectrum} </span> =
+	                  {Math.round(spectrumInfo.meanOfBreath)} / <span className="info-bar-spectrum-span"> {Math.round(spectrumInfo.meanSpectrum)} </span> =
                       <span className="info-bar-spectrum-span">{spectrumInfo.meanOfBreathR}</span> %
                   </h3>
                   <h5 className="text-center">

@@ -1,4 +1,5 @@
 import React from 'react';
+import { isNumber } from 'lodash';
 import { MicLevelControl } from './components/MicLevelControl'
 import { RangeSelector } from './components/RangeSelector';
 import { useWindowSize } from '../../hooks/useWindowSize';
@@ -13,7 +14,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
     return (
       <div className="d-flex flex-column align-items-t flex-fill" style={style}>
         <h1 className="text-center" style={{color: spectrumInfo.color}}>
-            {distance !== null ? `${distance} mm` : '-'}
+            {isNumber(distance) ? `${distance} mm` : '-'}
         </h1>
         <MicLevelControl socket={socket}/>
         {spectrumInfo.timeLeft <= 0 ?
@@ -22,7 +23,7 @@ const InfoBarComponent = ({ spectrumInfo, config, distance, socket }) => {
               <div className="d-flex flex-column ">
                   <h3 className="text-center">
                       <small className="text-muted">Spectrum:</small>
-                      {spectrumInfo.meanOfBreath} / {spectrumInfo.mean} = {spectrumInfo.meanOfBreathR} %
+                      {Math.round(spectrumInfo.meanOfBreath)} / {Math.round(spectrumInfo.mean)} = {spectrumInfo.meanOfBreathR} %
                   </h3>
                   <h5 className="text-center">
                       <small className="text-muted">Range:</small>

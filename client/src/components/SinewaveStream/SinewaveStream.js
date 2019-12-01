@@ -2,20 +2,22 @@ import React, { useState, useEffect, useRef } from 'react';
 import { range } from 'ramda';
 import { drawWave } from "./utils";
 import './style.css';
+import { meanSpectrumOfBreath } from "../../utils/MeanSpectrumOfBreath";
 
 const time = 10; //seconds
 let chunkCount = 0;
 const chunkCountsPerSecond = 5;
 
-const Sinewave = ({ wave, color, windowInfo }) => {
+const Sinewave = ({ wave, spectrumInfo, windowInfo }) => {
   const { sineWaveHeight, sineWaveWidth } = windowInfo;
   const canvas = useRef(null);
   const [imgUrls, setImgUrls] = useState([]);
-
+  const [color, setColor] = useState(meanSpectrumOfBreath.getColor(spectrumInfo.meanOfBreathR));
   useEffect(() => {
     if(!canvas.current) return;
     const { width, height } = canvas.current;
     const canvasCtx = canvas.current.getContext("2d");
+
     drawWave(wave, canvasCtx, width, height, {
       fillStyle: '#d6d8d9', //fillStyle, // background
       strokeStyle: color, //'rgb(0, 0, 0)', // line color
@@ -32,7 +34,12 @@ const Sinewave = ({ wave, color, windowInfo }) => {
       }
       const urls = [url, ...imgUrls];
       setImgUrls(urls);
+
       chunkCount = 0
+    }
+    if(chunkCount > (chunkCountsPerSecond -1 )) {
+      const newColor = meanSpectrumOfBreath.getColor(spectrumInfo.meanOfBreathR);
+      setColor(newColor);
     }
   },[wave]);
 

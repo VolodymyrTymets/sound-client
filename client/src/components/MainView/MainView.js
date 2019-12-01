@@ -67,7 +67,7 @@ const MainView = ({ windowInfo }) => {
 		<>
 			{ !isLoading ? (
 				<div className="container-fluid main-view" style={{padding: 0}}>
-					<Sinewave windowInfo={windowInfo} color={spectrumInfo.color} wave={wave} />
+					<Sinewave windowInfo={windowInfo} spectrumInfo={spectrumInfo} wave={wave} />
 					<div
 						className={`d-flex ${className}`}>
 						{socket &&  <InfoBar meanSpectrumOfBreath={meanSpectrumOfBreath} color={spectrumInfo.color} spectrumInfo={spectrumInfo} socket={socket} config={config} onRateChange={onRateChange}/> }

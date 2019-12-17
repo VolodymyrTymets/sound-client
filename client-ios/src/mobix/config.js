@@ -1,7 +1,7 @@
 import { types } from "mobx-state-tree";
 
 const staticConfig = {
-  timeToListen: 10, // seconds
+  timeToListen: 2, // seconds
   minRateDif: 20, // %
   maxRateDif: 50, // %
   sinewaveScale: 1.9,

@@ -2,27 +2,20 @@ const { isEmpty, keys } = require('lodash');
 
 class SocketClients  {
 	constructor() {
-	  this._clients = {};
-	  this._lastClient = {};
-  }
+		this._clients = {};
+	}
 	isOneConnected() {
-	  //return !isEmpty(this._clients);
-		return !!this._lastClient
-  }
-  setClient(client) {
-		if(this._lastClient) {
-			delete this._lastClient;
+		return !isEmpty(this._clients);
+	}
+	setClient(client) {
+		this._clients = {
+			...this._clients,
+			[client.id]: client,
 		}
-	  this._lastClient = client
-    // this._clients = {
-    //   //...this._clients,
-    //   [client.id]: client,
-    // }
-  }
-  removeClient(client) {
-    //delete this._clients[client.id];
-	  delete this._lastClient;
-  }
+	}
+	removeClient(client) {
+		delete this._clients[client.id];
+	}
 }
 
 const socketClients = new SocketClients();

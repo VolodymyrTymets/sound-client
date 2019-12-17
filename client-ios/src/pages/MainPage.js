@@ -45,6 +45,9 @@ export const App = compose(
 		componentDidMount() {
 			this.props.windowInfo.init();
 			this.props.config.setUrl(url);
+			window.addEventListener('resize', () => {
+				this.props.windowInfo.init();
+			});
 			ss(socket).on('mic-stream', (stream, {
 				mic,
 				minRateDif,
